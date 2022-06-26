@@ -7,17 +7,18 @@ interface IIssueJWTRequest {
     subject: any
     key: string
     expiresIn: string
+
 }
 
 export default function issueJWT({ payload, subject, key, expiresIn }: IIssueJWTRequest) {
 
-    return sign({ payload }, key, {
+    const token = sign({ payload }, key, {
         subject,
-        expiresIn
+        expiresIn,
+        algorithm: "RS256"
     })
 
-
-
+    return `Bearer ${token}`
 
 
 }

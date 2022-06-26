@@ -1,27 +1,24 @@
 import { NextFunction, Request, Response } from "express";
-import { JwtPayload, verify } from "jsonwebtoken";
-
+import { JwtPayload } from "jsonwebtoken";
+import VerifyJWT from "../../../utils/tokens/verifyJWT";
+import * as fs from "fs"
 import { AppError } from "../errors/AppError";
 
 
 
 export async function ensureAuthenticated(req: Request, res: Response, next: NextFunction) {
     //se o token tiver expirado fazer logica do refresh token
-    const authHeader = req.headers.authorization
+    const bearerToken = req.headers.authorization
 
-    //como pegar os tokens?
-    // const url = `${req.protocol}://${req.headers.host}${req.originalUrl}`
-
-    // const t = req.headers['x-access-token']//?['refresh_token']
-
-    if (!authHeader) {
+    if (!bearerToken) {
         throw new AppError("Token missing", 400)
     }
 
-    const [, token] = authHeader.split(" ")
-    //separar os tokens com espaço
+    const [, token] = bearerToken.split(" ")
 
-    verify(token, process.env.SECRET_TOKEN as string, (err, decoded: string | JwtPayload) => {
+    const PUB_KEY = fs.readFileSync("../../../../../keys/id_rsa_pub.pem", "utf-8")
+
+    VerifyJWT(token, PUB_KEY, (err, decoded: string | JwtPayload) => {
 
         if (err) {
 
@@ -36,10 +33,6 @@ export async function ensureAuthenticated(req: Request, res: Response, next: Nex
 
         next()
     })
-
-
-
-
 
 
 }
