@@ -1,11 +1,17 @@
-import { compare } from "bcryptjs";
-import { sign } from "jsonwebtoken";
+
 import { inject, injectable } from "tsyringe";
 import { IDateProvider } from "../../../../shared/container/providers/dateProvider/IDateProvider";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
 import { IUsersTokensRepository } from "../../repositories/IUsersTokensRepository";
 import { v4 as uuidV4 } from "uuid"
 import { AppError } from "../../../../shared/errors/AppError";
+import { validatePassword } from "../../../../../utils/password/passwordUtils";
+import * as fs from "fs"
+import path from "path"
+import issueJWT from "../../../../../utils/tokens/issueJWT";
+import * as crypto from "crypto"
+
+
 
 interface IResponse {
     user: {
@@ -39,9 +45,10 @@ class AuthenticateUserUseCase {
             throw new AppError("email or password incorrect")
         }
 
-        const passwordMatch = await compare(password, user.password)
 
-        if (!passwordMatch) {
+        //const passwordMatch = await compare(password, user.password)
+
+        if (!validatePassword(password, user.salt, user.password_hash)) {
             throw new AppError("email or password incorrect")
         }
 
@@ -51,25 +58,20 @@ class AuthenticateUserUseCase {
         //deleta todos os tokens de outros logins
         await this.usersTokensRepository.deleteByUserId(user.id as string)
 
+        //pega a chave privada e decofica em utf-8
+        const PRIV_KEY = fs.readFileSync("../../../../../keys/id_rsa_priv.pem", 'utf-8')
+
         //bearer token/ id token
-        const token = sign({ email }, process.env.SECRET_TOKEN as string, {
-            subject: user.id,
-            expiresIn: process.env.EXPIRES_IN_TOKEN as string
-        })
+        const token = issueJWT({ payload: email, subject: user.id, key: PRIV_KEY, expiresIn: process.env.EXPIRES_IN_TOKEN as string })
 
-        //refresh token
-        const refresh_token = sign({}, process.env.SECRET_REFRESH_TOKEN as string, {
-            subject: user.id,
-            expiresIn: process.env.EXPIRES_IN_REFRESH_TOKEN as string
-        })
-
-        //cria a familia do refresh token
-        const token_family = uuidV4()
-
+        //refresh token 
+        const refresh_token = crypto.randomBytes(32).toString("hex")// pode ser uuid?
+        console.log(refresh_token)
+        const token_family = uuidV4()//cria a familia do refresh token
         const refresh_token_expires_date = this.DateProvider.addOrSubtractTime("add", "day", Number(process.env.EXPIRES_REFRESH_TOKEN_DAYS))
 
         await this.usersTokensRepository.create({
-            refresh_token: refresh_token,
+            token: refresh_token,
             expires_date: refresh_token_expires_date, //30d
             user_id: user.id as string,
             is_valid: true,
@@ -84,7 +86,7 @@ class AuthenticateUserUseCase {
                 email
             },
             token,
-            refresh_token
+            refresh_token // nao vai retornar para o usuario
         }
 
         return tokenReturn

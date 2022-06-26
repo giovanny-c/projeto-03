@@ -32,7 +32,7 @@ class SendConfirmationRegisterMailUseCase {
         const expires_date = this.dateProvider.addOrSubtractTime("add", "hours", 3)
 
         await this.usersTokensRepository.create({
-            refresh_token: token,
+            token: token,
             user_id: user.id as string,
             expires_date
         })

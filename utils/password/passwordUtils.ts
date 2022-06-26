@@ -1,12 +1,8 @@
 import * as crypto from "crypto"
 
-interface IpasswordHash {
-    password?: string
-    salt: string
-    hash: string
-}
 
-function genPassword(password: string): IpasswordHash {
+
+function genPassword(password: string) {
 
     const salt = crypto.randomBytes(32).toString("hex")
     const generateHash = crypto.pbkdf2Sync(password, salt, 10000, 64, "sha512").toString("hex")
@@ -18,7 +14,7 @@ function genPassword(password: string): IpasswordHash {
 }
 
 
-function validatePassword({ password, salt, hash }: IpasswordHash): boolean {
+function validatePassword(password: string, salt: string, hash: string): boolean {
 
     const hashVerify = crypto.pbkdf2Sync(password as string, salt, 10000, 64, "sha512").toString("hex")
 

@@ -8,7 +8,7 @@ export const dataSource: DataSource = new DataSource({
     port: 5432,
     username: "root",
     password: "1234",
-    database: "projeto02_database",
+    database: "projeto03_database",
     // migrationsRun: true,
     // logging: true,
     entities: [
