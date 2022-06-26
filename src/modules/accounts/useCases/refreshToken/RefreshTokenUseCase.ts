@@ -1,11 +1,13 @@
 
-import { sign } from "jsonwebtoken";
 import { inject, injectable } from "tsyringe";
 
 import { IUsersRepository } from "../../repositories/IUsersRepository";
 import { IUsersTokensRepository } from "../../repositories/IUsersTokensRepository";
 import { IDateProvider } from "../../../../shared/container/providers/dateProvider/IDateProvider";
 import { AppError } from "../../../../shared/errors/AppError";
+import { v4 as uuidV4 } from "uuid"
+import issueJWT from "../../../../../utils/tokens/issueJWT";
+import * as fs from "fs"
 
 interface IResponse {
     token: string
@@ -31,8 +33,6 @@ class RefreshTokenUseCase {
 
         const refreshToken = await this.usersTokensRepository.findByRefreshToken(refresh_token)
 
-        const { id: user_id, email, is_logged } = await this.usersRepository.findById(refreshToken.user_id)
-
         //verificar se o token existe
         if (!refreshToken) {
             throw new AppError("Token Missing. Please Log-in")
@@ -47,6 +47,8 @@ class RefreshTokenUseCase {
             throw new AppError("Conection expired (Invalid token). Please Log-in again", 400)
 
         }
+
+
         //se ja foi usado
         if (refreshToken.was_used === true) {
             //invalida todos os tokens da mesma familia(mesmo criados posteriormente)
@@ -67,6 +69,9 @@ class RefreshTokenUseCase {
         }
 
 
+        const { id: user_id, email, is_logged } = await this.usersRepository.findById(refreshToken.user_id)
+
+
         //se nao cair nas exeptions
         //marcar rf token como usado e invalid
         this.usersTokensRepository.setTokenAsInvalidAndUsed(refreshToken.id)
@@ -78,24 +83,19 @@ class RefreshTokenUseCase {
         }
 
         //cria um novo token
-        const newToken = sign({ email }, process.env.SECRET_TOKEN as string, {
-            subject: user_id,
-            expiresIn: process.env.EXPIRES_IN_TOKEN as string
-        })
+        const PRIV_KEY = fs.readFileSync("../../../../../keys/id_rsa_priv.pem", "utf-8")
+        const newToken = issueJWT({ payload: email, subject: user_id, key: PRIV_KEY, expiresIn: process.env.EXPIRES_IN_TOKEN as string })
 
         //cria um novo rf
-        const newRefreshToken = sign({}, process.env.SECRET_REFRESH_TOKEN as string, {
-            subject: user_id, // com o mesmo user id
-            expiresIn: process.env.EXPIRES_IN_REFRESH_TOKEN as string
-        })
+        const newRefresh_token = uuidV4()
+        console.log(refresh_token)
+        const refresh_token_expires_date = this.dateProvider.addOrSubtractTime("add", "day", Number(process.env.EXPIRES_REFRESH_TOKEN_DAYS))
 
-        //nova data de expiração
-        const newRefreshTokenExpiresDate = this.dateProvider.addOrSubtractTime("add", "day", Number(process.env.EXPIRES_REFRESH_TOKEN_DAYS))
 
         //e cria outro rf token da mesma familia no bd
-        await this.usersTokensRepository.create({
-            refresh_token: newRefreshToken,
-            expires_date: newRefreshTokenExpiresDate,
+        const newRefreshToken = await this.usersTokensRepository.create({
+            token: newRefresh_token,
+            expires_date: refresh_token_expires_date,
             user_id: user_id as string,
             is_valid: true,
             was_used: false,
@@ -103,11 +103,9 @@ class RefreshTokenUseCase {
         })
 
 
-
-
         return {
             token: newToken,
-            refresh_token: newRefreshToken
+            refresh_token: newRefreshToken.token // nao retorna 
         }
     }
 

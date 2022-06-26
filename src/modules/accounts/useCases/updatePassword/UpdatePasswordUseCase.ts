@@ -1,4 +1,5 @@
 import { inject, injectable } from "tsyringe";
+import { genPassword } from "../../../../../utils/password/passwordUtils";
 import { IDateProvider } from "../../../../shared/container/providers/dateProvider/IDateProvider";
 import { AppError } from "../../../../shared/errors/AppError";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
@@ -40,9 +41,12 @@ class UpdatePasswordUseCase {
         }
 
 
+        const { salt, hash } = genPassword(password)
+
         await this.userRepository.create({
             id: tokenExists.user_id as string || user_id,
-            password
+            password_hash: hash,
+            salt
         })
 
     }

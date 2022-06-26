@@ -6,6 +6,7 @@ import { IUsersTokensRepository } from "../../repositories/IUsersTokensRepositor
 
 import { resolve } from "path";
 import { v4 as uuidV4 } from "uuid"
+import issueJWT from "../../../../../utils/tokens/issueJWT";
 
 @injectable()
 class SendConfirmationRegisterMailUseCase {
@@ -15,10 +16,7 @@ class SendConfirmationRegisterMailUseCase {
         private usersRepository: IUsersRepository,
         @inject("MailProvider")
         private mailProvider: IMailProvider,
-        @inject("DayjsDateProvider")
-        private dateProvider: IDateProvider,
-        @inject("UsersTokensRepository")
-        private usersTokensRepository: IUsersTokensRepository) {
+    ) {
 
     }
 
@@ -27,15 +25,10 @@ class SendConfirmationRegisterMailUseCase {
         const user = await this.usersRepository.findByEmail(email as string)
 
         const templatePath = resolve(__dirname, "..", "..", "..", "..", "..", "views", "accounts", "emails", "confirmateRegister.hbs")
-        const token = uuidV4()
 
-        const expires_date = this.dateProvider.addOrSubtractTime("add", "hours", 3)
+        const PRIV_KEY = fs.readFileSync("../../../../../keys/id_rsa_priv.pem", 'utf-8')
 
-        await this.usersTokensRepository.create({
-            token: token,
-            user_id: user.id as string,
-            expires_date
-        })
+        const token = issueJWT({ subject: user.id, key: PRIV_KEY, expiresIn: process.env.EXPIRES_IN_CONFIRAMTION_TOKEN as string })
 
         const variables = {
             name: user.name,

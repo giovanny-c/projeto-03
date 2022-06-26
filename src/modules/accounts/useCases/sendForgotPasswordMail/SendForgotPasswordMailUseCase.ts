@@ -7,6 +7,7 @@ import { AppError } from "../../../../shared/errors/AppError";
 import { IUsersRepository } from "../../repositories/IUsersRepository"
 import { v4 as uuidV4 } from "uuid"
 import { IUsersTokensRepository } from "../../repositories/IUsersTokensRepository";
+import issueJWT from "../../../../../utils/tokens/issueJWT";
 
 @injectable()
 class SendForgotPasswordMailUseCase {
@@ -14,12 +15,8 @@ class SendForgotPasswordMailUseCase {
     constructor(
         @inject("MailProvider")
         private mailProvider: IMailProvider,
-        @inject("DayjsDateProvider")
-        private dateProvider: IDateProvider,
         @inject("UsersRepository")
         private usersRepository: IUsersRepository,
-        @inject("UsersTokensRepository")
-        private usersTokensRepository: IUsersTokensRepository
 
     ) { }
 
@@ -35,15 +32,9 @@ class SendForgotPasswordMailUseCase {
 
         const templatePath = resolve(__dirname, "..", "..", "..", "..", "..", "views", "accounts", "emails", "forgotPassword.hbs")
 
-        const token = uuidV4()
+        const PRIV_KEY = fs.readFileSync("../../../../../keys/id_rsa_priv.pem", "utf-8")
 
-        const expires_date = this.dateProvider.addOrSubtractTime("add", "hours", 3)
-
-        await this.usersTokensRepository.create({
-            refresh_token: token,
-            user_id: userExists.id as string,
-            expires_date: expires_date
-        })
+        const token = issueJWT({ subject: userExists.id, key: PRIV_KEY, expiresIn: process.env.EXPIRES_IN_FORGOT_PASSWORD_TOKEN as string })
 
         const variables = {
             name: userExists.name,

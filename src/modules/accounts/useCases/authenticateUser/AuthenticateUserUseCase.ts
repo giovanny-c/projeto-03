@@ -7,9 +7,8 @@ import { v4 as uuidV4 } from "uuid"
 import { AppError } from "../../../../shared/errors/AppError";
 import { validatePassword } from "../../../../../utils/password/passwordUtils";
 import * as fs from "fs"
-import path from "path"
 import issueJWT from "../../../../../utils/tokens/issueJWT";
-import * as crypto from "crypto"
+
 
 
 
@@ -31,7 +30,7 @@ class AuthenticateUserUseCase {
         @inject("UsersTokensRepository")
         private usersTokensRepository: IUsersTokensRepository,
         @inject("DayjsDateProvider")
-        private DateProvider: IDateProvider
+        private dateProvider: IDateProvider
     ) {
 
     }
@@ -65,10 +64,10 @@ class AuthenticateUserUseCase {
         const token = issueJWT({ payload: email, subject: user.id, key: PRIV_KEY, expiresIn: process.env.EXPIRES_IN_TOKEN as string })
 
         //refresh token 
-        const refresh_token = crypto.randomBytes(32).toString("hex")// pode ser uuid?
+        const refresh_token = uuidV4()// pode ser uuid?
         console.log(refresh_token)
         const token_family = uuidV4()//cria a familia do refresh token
-        const refresh_token_expires_date = this.DateProvider.addOrSubtractTime("add", "day", Number(process.env.EXPIRES_REFRESH_TOKEN_DAYS))
+        const refresh_token_expires_date = this.dateProvider.addOrSubtractTime("add", "day", Number(process.env.EXPIRES_REFRESH_TOKEN_DAYS))
 
         await this.usersTokensRepository.create({
             token: refresh_token,
