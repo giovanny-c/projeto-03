@@ -18,7 +18,7 @@ export class CreateTableUsersTokens1653558826133 implements MigrationInterface {
 
                     },
                     {
-                        name: "refresh_token",
+                        name: "token",
                         type: "varchar"
 
                     },

@@ -13,9 +13,12 @@ class User {
     @Column()
     email: string
 
-    @Exclude()//nao vai trazer a senha 
+    //@Exclude()//nao vai trazer a senha 
     @Column()
-    password: string
+    password_hash: string
+
+    @Column()
+    salt: string
 
     @Column()
     is_confirmed: boolean

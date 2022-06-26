@@ -14,10 +14,10 @@ class UsersTokensRepository implements IUsersTokensRepository {
     }
 
 
-    async create({ expires_date, refresh_token, user_id, is_valid, was_used, token_family }: ICreateUserTokenDTO): Promise<UsersTokens> {
+    async create({ expires_date, token, user_id, is_valid, was_used, token_family }: ICreateUserTokenDTO): Promise<UsersTokens> {
         const userToken = this.repository.create({
             expires_date,
-            refresh_token,
+            token,
             user_id,
             is_valid,
             was_used,
@@ -28,18 +28,18 @@ class UsersTokensRepository implements IUsersTokensRepository {
 
         return userToken
     }
-    async findByUserIdAndRefreshToken({ user_id, refresh_token }: ICreateUserTokenDTO): Promise<UsersTokens> {
+    async findByUserIdAndRefreshToken({ user_id, token }: ICreateUserTokenDTO): Promise<UsersTokens> {
 
         const userToken = await this.repository.findOne({
-            where: { user_id, refresh_token }
+            where: { user_id, token }
         })
 
         return userToken as UsersTokens
     }
 
-    async findByRefreshToken(refresh_token: string): Promise<UsersTokens> {
+    async findByRefreshToken(token: string): Promise<UsersTokens> {
 
-        const userToken = await this.repository.findOne({ where: { refresh_token } })
+        const userToken = await this.repository.findOne({ where: { token } })
 
         return userToken as UsersTokens
 

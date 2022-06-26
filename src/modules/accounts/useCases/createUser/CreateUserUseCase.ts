@@ -26,6 +26,8 @@ class CreateUserUseCase {
                 throw new AppError("This user already exists")//fazer middleware de error
             }
 
+
+
             const passwordHash = await hash(password as string, 8)
 
             await this.usersRepository.create({ name, email, password: passwordHash })

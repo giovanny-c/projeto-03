@@ -36,9 +36,9 @@ class UsersRepository implements IUsersRepository {
         await this.repository.save(user)
     }
 
-    async create({ id, name, email, password, is_confirmed }: ICreateUserDTO): Promise<User> {
+    async create({ id, name, email, password_hash, salt, is_confirmed }: ICreateUserDTO): Promise<User> {
 
-        const user = this.repository.create({ id, name, email, password, is_confirmed })
+        const user = this.repository.create({ id, name, email, password_hash, salt, is_confirmed })
 
         await this.repository.save(user)
 

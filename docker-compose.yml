@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
 
-  db_projeto02:
+  db_projeto03:
     container_name: database_projeto03
     image: postgres
     restart: always

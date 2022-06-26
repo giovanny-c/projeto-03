@@ -1,5 +1,5 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add class-transformer
+  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add crypto
 
 PATH: 
   C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Intel\iCLS Client\;C:\Program Files\Intel\iCLS Client\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\130\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\140\Tools\Binn\;C:\Program Files\Microsoft SQL Server\140\Tools\Binn\;C:\Program Files\Microsoft SQL Server\140\DTS\Binn\;C:\Program Files (x86)\Microsoft SQL Server\Client SDK\ODBC\130\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\140\DTS\Binn\;C:\Program Files (x86)\Microsoft SQL Server\140\Tools\Binn\ManagementStudio\;C:\Program Files\Git\cmd;C:\xampp\php;C:\ProgramData\ComposerSetup\bin;C:\ProgramData\chocolatey\bin;C:\Program Files (x86)\Yarn\bin\;C:\Program Files\PostgreSQL\12\bin;C:\Program Files\nodejs\;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\Users\Giovanny\AppData\Local\Microsoft\WindowsApps;C:\Users\Giovanny\AppData\Roaming\Composer\vendor\bin;C:\Users\Giovanny\AppData\Local\Yarn\bin;C:\Users\Giovanny\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Giovanny\AppData\Roaming\npm
@@ -14,14 +14,14 @@ Platform:
   win32 x64
 
 Trace: 
-  Error: EPERM: operation not permitted, unlink 'C:\bootcamp\projetos\projeto02\node_modules\.bin\ts-node-dev'
+  Error: EPERM: operation not permitted, unlink 'C:\bootcamp\projetos\projeto03\node_modules\.bin\ts-node-dev'
 
 npm manifest: 
   {
-    "name": "projeto02",
+    "name": "projeto03",
     "version": "1.0.0",
     "main": "index.js",
-    "repository": "https://github.com/giovanny-c/project-02.git",
+    "repository": "https://github.com/giovanny-c/projeto-03.git",
     "author": "Giovanny Castanharo <giovanycast@hotmail.com>",
     "license": "MIT",
     "scripts": {
@@ -32,6 +32,7 @@ npm manifest:
     "dependencies": {
       "aws-sdk": "^2.1143.0",
       "bcryptjs": "^2.4.3",
+      "class-transformer": "^0.5.1",
       "dayjs": "^1.11.2",
       "dotenv": "^16.0.1",
       "express": "^4.18.1",
@@ -380,6 +381,11 @@ Lockfile:
       readdirp "~3.6.0"
     optionalDependencies:
       fsevents "~2.3.2"
+  
+  class-transformer@^0.5.1:
+    version "0.5.1"
+    resolved "https://registry.yarnpkg.com/class-transformer/-/class-transformer-0.5.1.tgz#24147d5dffd2a6cea930a3250a677addf96ab336"
+    integrity sha512-SQa1Ws6hUbfC98vKGxZH3KFY0Y1lm5Zm0SY8XX9zbK7FJCyVEac3ATW0RIpwzW+oOfmHE5PMPufDG9hCfoEOMw==
   
   cli-highlight@^2.1.11:
     version "2.1.11"
@@ -992,7 +998,7 @@ Lockfile:
   object-assign@^4.0.1:
     version "4.1.1"
     resolved "https://registry.yarnpkg.com/object-assign/-/object-assign-4.1.1.tgz#2109adc7965887cfc05cbbd442cac8bfbb360863"
-    integrity sha1-IQmtx5ZYh8/AXLvUQsrIv7s2CGM=
+    integrity sha512-rJgTQnkUnH1sFw8yT6VSU3zD3sWmu6sZhIseY8VX+GRu3P6F7Fu+JNDoXfklElbLJSnc3FUQHVe4cU5hj+BcUg==
   
   object-inspect@^1.9.0:
     version "1.12.0"
@@ -1188,7 +1194,7 @@ Lockfile:
   require-directory@^2.1.1:
     version "2.1.1"
     resolved "https://registry.yarnpkg.com/require-directory/-/require-directory-2.1.1.tgz#8c64ad5fd30dab1c976e2344ffe7f792a6a6df42"
-    integrity sha1-jGStX9MNqxyXbiNE/+f3kqam30I=
+    integrity sha512-fGxEI7+wsG9xrvdjsrlmL22OMTTiHRwAMroiEeMgq8gzoLC/PQr7RsRDSTLUg/bZAZtF+TVIkHc6/4RIKrui+Q==
   
   resolve@^1.0.0:
     version "1.22.0"
@@ -1346,7 +1352,7 @@ Lockfile:
   thenify-all@^1.0.0:
     version "1.6.0"
     resolved "https://registry.yarnpkg.com/thenify-all/-/thenify-all-1.6.0.tgz#1a1918d402d8fc3f98fbf234db0bcc8cc10e9726"
-    integrity sha1-GhkY1ALY/D+Y+/I02wvMjMEOlyY=
+    integrity sha512-RNxQH/qI8/t3thXJDwcstUO4zeqo64+Uy/+sNVRBx4Xn2OX+OZ9oP+iJnNFqplFra2ZUVeKCSa2oVWi3T4uVmA==
     dependencies:
       thenify ">= 3.1.0 < 4"
   
