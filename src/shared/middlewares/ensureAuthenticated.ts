@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { JwtPayload } from "jsonwebtoken";
-import VerifyJWT from "../../../utils/tokens/verifyJWT";
+import { JsonWebTokenError, JwtPayload, TokenExpiredError, verify } from "jsonwebtoken";
 import * as fs from "fs"
 import { AppError } from "../errors/AppError";
 
@@ -18,11 +17,17 @@ export async function ensureAuthenticated(req: Request, res: Response, next: Nex
 
     const PUB_KEY = fs.readFileSync("../../../../../keys/id_rsa_pub.pem", "utf-8")
 
-    VerifyJWT(token, PUB_KEY, (err, decoded: string | JwtPayload) => {
+    verify(token, PUB_KEY, { algorithms: ["RS256"] }, (err, decoded: string | JwtPayload) => {
 
-        if (err) {
+        if (err instanceof TokenExpiredError) {
 
             //vai chamar o middleware de errorHandler
+            err.message = "token expired (go to /refresh-token), Please Log-in again"
+            throw err
+        }
+        if (err instanceof JsonWebTokenError) {
+
+            err.message = "invalid token. Please Log-in to authenticate"
             throw err
         }
 

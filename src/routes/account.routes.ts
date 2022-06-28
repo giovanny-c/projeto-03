@@ -11,7 +11,7 @@ import { ensureAuthenticated } from "../shared/middlewares/ensureAuthenticated";
 import { RefreshTokenController } from "../modules/accounts/useCases/refreshToken/RefreshTokenController";
 import { LogOutController } from "../modules/accounts/useCases/logout/LogOutController";
 import { SendForgotPasswordMailController } from "../modules/accounts/useCases/sendForgotPasswordMail/SendForgotPasswordMailController";
-import { UpdatePasswordController } from "../modules/accounts/useCases/updatePassword/UpdatePasswordController";
+import { RetrievePasswordController } from "../modules/accounts/useCases/retrivePassword/RetrievePasswordController";
 
 const accountRoutes = Router()
 
@@ -23,7 +23,7 @@ const getProfileController = new GetProfileController()
 const refreshTokenController = new RefreshTokenController()
 const logOutController = new LogOutController()
 const sendForgotPasswordMailController = new SendForgotPasswordMailController()
-const updatePasswordController = new UpdatePasswordController()
+const retrievePasswordController = new RetrievePasswordController()
 
 
 accountRoutes.post("/sign-in", createUserController.handle)
@@ -40,7 +40,7 @@ accountRoutes.get("/profile", ensureAuthenticated, getProfileController.handle)
 accountRoutes.post("/log-out", ensureAuthenticated, logOutController.handle)
 
 accountRoutes.post("/forgot-password", sendForgotPasswordMailController.handle)
-accountRoutes.post("/retrieve-password", updatePasswordController.handle)
+accountRoutes.post("/retrieve-password", retrievePasswordController.handle)
 
 // como passar o bearer token automaticamente para todas as rotas
 //como mandar do ensureAuthenticated para /refresh-token?

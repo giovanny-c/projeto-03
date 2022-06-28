@@ -20,7 +20,7 @@ export function errorHandler(err: Error, req: Request, res: Response, next: Next
 
 
 
-        return res.status(401).send({ message: "token expired (go to /refresh-token), Please Log-in again" })
+        return res.status(401).send({ message: err.message })
 
         //return res.redirect("/accounst/refresh-token"); ?
 
@@ -32,7 +32,7 @@ export function errorHandler(err: Error, req: Request, res: Response, next: Next
 
 
 
-        return res.status(401).send({ message: "invalid token. Please Log-in to authenticate" })
+        return res.status(401).send({ message: err.message })
 
 
 

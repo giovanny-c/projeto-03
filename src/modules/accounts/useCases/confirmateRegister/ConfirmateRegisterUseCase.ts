@@ -1,3 +1,4 @@
+import { JsonWebTokenError, TokenExpiredError, verify } from "jsonwebtoken";
 import { inject, injectable } from "tsyringe";
 
 
@@ -5,7 +6,7 @@ import { IUsersTokensRepository } from "../../../../modules/accounts/repositorie
 import { IDateProvider } from "../../../../shared/container/providers/dateProvider/IDateProvider";
 import { AppError } from "../../../../shared/errors/AppError";
 import { UsersRepository } from "../../repositories/implementations/UsersRepository";
-
+import * as fs from "fs"
 
 
 
@@ -25,24 +26,32 @@ class ConfirmateRegisterUseCase {
 
     async execute(confirmationToken: string): Promise<void> {
 
-        const token = await this.usersTokensRepository.findByRefreshToken(confirmationToken)
+        try {
 
-        if (!token) {
-            throw new AppError("Invalid Token")
+            const PUB_KEY = fs.readFileSync("../../../../../id_rsa_pub.pem", "utf-8")
+
+            const user_id = verify(confirmationToken, PUB_KEY, { algorithms: ["RS256"] })
+            console.log(user_id)
+            const user = await this.usersRepository.findById(user_id.sub as string)
+
+            user.is_confirmed = true
+
+            await this.usersRepository.create(user)
+
+        } catch (err) {
+            if (err instanceof TokenExpiredError) {
+                err.message = "Token expired"
+
+                throw err
+            }
+            if (err instanceof JsonWebTokenError) {
+                err.message = "Invalid token"
+
+                throw err
+            }
         }
 
-        //se a data de expiração 
-        if (this.dateProvider.compareIfBefore(token.expires_date, this.dateProvider.dateNow())) {
-            throw new AppError("Token expired")
-        }
 
-        const user = await this.usersRepository.findById(token.user_id)
-
-        user.is_confirmed = true
-
-        await this.usersRepository.create(user)
-
-        await this.usersTokensRepository.deleteById(token.id)
 
     }
 
