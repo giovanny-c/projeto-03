@@ -1,12 +1,10 @@
 import { inject, injectable } from "tsyringe";
 import { genPassword } from "../../../../../utils/password/passwordUtils";
 
-import { IDateProvider } from "../../../../shared/container/providers/dateProvider/IDateProvider";
 import { AppError } from "../../../../shared/errors/AppError";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
-import { IUsersTokensRepository } from "../../repositories/IUsersTokensRepository";
-import * as fs from "fs"
 import { JsonWebTokenError, TokenExpiredError, verify } from "jsonwebtoken";
+import { PUB_KEY } from "../../../../../utils/keyUtils/readKeys";
 
 @injectable()
 class RetrievePasswordUseCase {
@@ -14,11 +12,8 @@ class RetrievePasswordUseCase {
 
     constructor(
         @inject("UsersRepository")
-        private userRepository: IUsersRepository,
-        @inject("UsersTokensRepository")
-        private userTokensRepository: IUsersTokensRepository,
-        @inject("DayjsDateProvider")
-        private dateProvider: IDateProvider
+        private userRepository: IUsersRepository
+
     ) { }
 
     async execute(password: string, confirmPassword: string, token: string): Promise<void> {
@@ -29,7 +24,7 @@ class RetrievePasswordUseCase {
 
         try {
 
-            const PUB_KEY = fs.readFileSync("../../../../../keys/id_rsa_pub.pem", "utf-8")
+
 
             const user_id = verify(token, PUB_KEY, { algorithms: ["RS256"] })
 

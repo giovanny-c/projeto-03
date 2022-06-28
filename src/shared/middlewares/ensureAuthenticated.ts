@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { JsonWebTokenError, JwtPayload, TokenExpiredError, verify } from "jsonwebtoken";
-import * as fs from "fs"
 import { AppError } from "../errors/AppError";
+import { PUB_KEY } from "../../../utils/keyUtils/readKeys";
 
 
 
@@ -15,7 +15,7 @@ export async function ensureAuthenticated(req: Request, res: Response, next: Nex
 
     const [, token] = bearerToken.split(" ")
 
-    const PUB_KEY = fs.readFileSync("../../../../../keys/id_rsa_pub.pem", "utf-8")
+
 
     verify(token, PUB_KEY, { algorithms: ["RS256"] }, (err, decoded: string | JwtPayload) => {
 

@@ -1,13 +1,11 @@
 
 import { resolve } from "path";
 import { inject, injectable } from "tsyringe";
-import { IDateProvider } from "../../../../shared/container/providers/dateProvider/IDateProvider";
 import { IMailProvider } from "../../../../shared/container/providers/mailProvider/IMailProvider";
 import { AppError } from "../../../../shared/errors/AppError";
 import { IUsersRepository } from "../../repositories/IUsersRepository"
-import { v4 as uuidV4 } from "uuid"
-import { IUsersTokensRepository } from "../../repositories/IUsersTokensRepository";
-import issueJWT from "../../../../../utils/tokens/issueJWT";
+import issueJWT from "../../../../../utils/tokensUtils/issueJWT";
+import { PRIV_KEY } from "../../../../../utils/keyUtils/readKeys";
 
 @injectable()
 class SendForgotPasswordMailUseCase {
@@ -32,7 +30,7 @@ class SendForgotPasswordMailUseCase {
 
         const templatePath = resolve(__dirname, "..", "..", "..", "..", "..", "views", "accounts", "emails", "forgotPassword.hbs")
 
-        const PRIV_KEY = fs.readFileSync("../../../../../keys/id_rsa_priv.pem", "utf-8")
+
 
         const token = issueJWT({ subject: userExists.id, key: PRIV_KEY, expiresIn: process.env.EXPIRES_IN_FORGOT_PASSWORD_TOKEN as string })
 

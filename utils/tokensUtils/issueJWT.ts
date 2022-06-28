@@ -6,7 +6,8 @@ interface IIssueJWTRequest {
     payload?: string
     subject: any
     key: string
-    expiresIn: string
+    expiresIn: string,
+
 
 }
 
@@ -18,7 +19,7 @@ export default function issueJWT({ payload, subject, key, expiresIn }: IIssueJWT
         algorithm: "RS256"
     })
 
-    return `Bearer ${token}`
+    return token
 
 
 }

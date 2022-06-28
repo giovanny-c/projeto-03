@@ -6,8 +6,8 @@ import { IUsersTokensRepository } from "../../repositories/IUsersTokensRepositor
 import { IDateProvider } from "../../../../shared/container/providers/dateProvider/IDateProvider";
 import { AppError } from "../../../../shared/errors/AppError";
 import { v4 as uuidV4 } from "uuid"
-import issueJWT from "../../../../../utils/tokens/issueJWT";
-import * as fs from "fs"
+import issueJWT from "../../../../../utils/tokensUtils/issueJWT";
+import { PRIV_KEY } from "../../../../../utils/keyUtils/readKeys";
 
 interface IResponse {
     token: string
@@ -83,7 +83,7 @@ class RefreshTokenUseCase {
         }
 
         //cria um novo token
-        const PRIV_KEY = fs.readFileSync("../../../../../keys/id_rsa_priv.pem", "utf-8")
+
         const newToken = issueJWT({ payload: email, subject: user_id, key: PRIV_KEY, expiresIn: process.env.EXPIRES_IN_TOKEN as string })
 
         //cria um novo rf
@@ -104,7 +104,7 @@ class RefreshTokenUseCase {
 
 
         return {
-            token: newToken,
+            token: `Bearer ${newToken}`,
             refresh_token: newRefreshToken.token // nao retorna 
         }
     }

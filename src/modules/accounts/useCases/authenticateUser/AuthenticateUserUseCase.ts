@@ -6,8 +6,8 @@ import { IUsersTokensRepository } from "../../repositories/IUsersTokensRepositor
 import { v4 as uuidV4 } from "uuid"
 import { AppError } from "../../../../shared/errors/AppError";
 import { validatePassword } from "../../../../../utils/password/passwordUtils";
-import * as fs from "fs"
-import issueJWT from "../../../../../utils/tokens/issueJWT";
+import issueJWT from "../../../../../utils/tokensUtils/issueJWT";
+import { PRIV_KEY } from "../../../../../utils/keyUtils/readKeys";
 
 
 
@@ -58,7 +58,7 @@ class AuthenticateUserUseCase {
         await this.usersTokensRepository.deleteByUserId(user.id as string)
 
         //pega a chave privada e decofica em utf-8
-        const PRIV_KEY = fs.readFileSync("../../../../../keys/id_rsa_priv.pem", 'utf-8')
+
 
         //bearer token/ id token
         const token = issueJWT({ payload: email, subject: user.id, key: PRIV_KEY, expiresIn: process.env.EXPIRES_IN_TOKEN as string })
@@ -84,7 +84,7 @@ class AuthenticateUserUseCase {
             user: {
                 email
             },
-            token,
+            token: `Bearer ${token}`,
             refresh_token // nao vai retornar para o usuario
         }
 

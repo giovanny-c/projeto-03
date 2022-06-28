@@ -1,7 +1,6 @@
 import { inject, injectable } from "tsyringe";
 import { ICreateUserDTO } from "../../dtos/ICreateUserDTO";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
-import { hash } from "bcryptjs";
 import { AppError } from "../../../../shared/errors/AppError";
 import { genPassword } from "../../../../../utils/password/passwordUtils"
 
@@ -40,7 +39,8 @@ class CreateUserUseCase {
             await this.usersRepository.create({ name, email, password_hash: hash, salt })
 
         } catch (error) {
-            throw new AppError("There was not possible to create a user, please try again. If the error persists contact the suport", 500)
+            // throw new AppError("There was not possible to create a user, please try again. If the error persists contact the suport", 500)
+            throw error
         }
 
 
