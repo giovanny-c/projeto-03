@@ -15,7 +15,7 @@ export async function ensureAuthenticated(req: Request, res: Response, next: Nex
 
     const [, token] = bearerToken.split(" ")
 
-
+    //req.headers.["application/x-www-form-urlencoded"]
 
     verify(token, PUB_KEY, { algorithms: ["RS256"] }, (err, decoded: string | JwtPayload) => {
 
@@ -30,6 +30,8 @@ export async function ensureAuthenticated(req: Request, res: Response, next: Nex
             err.message = "invalid token. Please Log-in to authenticate"
             throw err
         }
+
+
 
         req.user = {
             id: decoded.sub as string
