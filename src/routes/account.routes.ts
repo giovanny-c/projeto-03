@@ -12,6 +12,7 @@ import { RefreshTokenController } from "../modules/accounts/useCases/refreshToke
 import { LogOutController } from "../modules/accounts/useCases/logout/LogOutController";
 import { SendForgotPasswordMailController } from "../modules/accounts/useCases/sendForgotPasswordMail/SendForgotPasswordMailController";
 import { RetrievePasswordController } from "../modules/accounts/useCases/retrivePassword/RetrievePasswordController";
+import { GeneratePdfController } from "../modules/accounts/useCases/generatePdf/GeneratePdfController";
 
 const accountRoutes = Router()
 
@@ -24,7 +25,7 @@ const refreshTokenController = new RefreshTokenController()
 const logOutController = new LogOutController()
 const sendForgotPasswordMailController = new SendForgotPasswordMailController()
 const retrievePasswordController = new RetrievePasswordController()
-
+const generatePdfController = new GeneratePdfController()
 
 accountRoutes.post("/sign-in", createUserController.handle)
 accountRoutes.get("/sign-in", signInController.handle)
@@ -41,6 +42,7 @@ accountRoutes.post("/log-out", ensureAuthenticated, logOutController.handle)
 
 accountRoutes.post("/forgot-password", sendForgotPasswordMailController.handle)
 accountRoutes.post("/retrieve-password", retrievePasswordController.handle)
+accountRoutes.post("/gen-pdf", ensureAuthenticated, generatePdfController.handle)
 
 // como passar o bearer token automaticamente para todas as rotas
 //como mandar do ensureAuthenticated para /refresh-token?
