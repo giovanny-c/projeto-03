@@ -20,18 +20,21 @@ class GeneratePdfUseCase {
 
     async execute(content: Object, user_id: string) {
 
+
+        let data: string[] = []
+
         const user = await this.usersRepository.findById(user_id)
 
         if (!user) {
-            throw new AppError("No user provided")
+            throw new AppError("No user provided", 400)
         }
 
-        const data = [
-            user.name,
-            user.email,
-            Object.values(content).toString()
+        data.push(user.name, user.email)
+        Object.keys(content).forEach(key => {
 
-        ]
+            data.push(content[key.valueOf()].toString())
+
+        })
 
         this.pdfProvider.ConvertToPdfFile(data, true)
     }
