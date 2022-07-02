@@ -8,7 +8,7 @@ import path from "path"
 
 class Pdf_LibProvider implements IPdfProvider {
 
-    async ConvertToPdfFile(data: string[], saveOnApp?: boolean) {
+    async CreatePdf(data: string[], saveOnApp?: boolean) {
 
         console.log(data)
 

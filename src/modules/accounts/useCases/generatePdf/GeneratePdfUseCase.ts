@@ -36,7 +36,7 @@ class GeneratePdfUseCase {
 
         })
 
-        this.pdfProvider.ConvertToPdfFile(data, true)
+        this.pdfProvider.CreatePdf(data, true)
     }
 }
 export { GeneratePdfUseCase }
