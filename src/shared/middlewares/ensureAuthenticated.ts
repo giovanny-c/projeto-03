@@ -2,15 +2,15 @@ import { NextFunction, Request, Response } from "express";
 import { JsonWebTokenError, JwtPayload, TokenExpiredError, verify } from "jsonwebtoken";
 import { AppError } from "../errors/AppError";
 import { PUB_KEY } from "../../../utils/keyUtils/readKeys";
-import axios from "axios";
-import { request } from "http";
-
-
 
 
 export async function ensureAuthenticated(req: Request, res: Response, next: NextFunction) {
+
+
     //se o token tiver expirado fazer logica do refresh token
     const bearerToken = req.headers.authorization
+    const expires_date = req.headers["expires_date"]
+    const refresh_token = req.headers["refresh_token"]
 
     if (!bearerToken) {
         throw new AppError("Token missing", 400)
@@ -18,9 +18,27 @@ export async function ensureAuthenticated(req: Request, res: Response, next: Nex
 
     const [, token] = bearerToken.split(" ")
 
-    //req.headers.["application/x-www-form-urlencoded"]
+    //pegar o tempo de expiração que deve ser mandado junto ao token
+    //comparar pra ver se ja venceu
+    //se sim, pular essa verificaçao com o verify
+    //e passar pelo /refresh-token
 
-    verify(token, PUB_KEY, { algorithms: ["RS256"] }, (err, decoded: string | JwtPayload) => {
+
+
+    if (!expires_date) {
+        throw new AppError("Unable to authenticate, please log in again")
+    }
+
+    //fazer a comparação sem usar o provider
+    // if (dayjs.compareIfBefore(dayjs.dateNow(), dayjs.convertToDate(expires_date as string))) {
+
+    //     console.log(`a data ${expires_date} e antes de ${dayjs.dateNow()}`)
+
+    // }
+
+
+
+    verify(token, PUB_KEY, { algorithms: ["RS256"] }, (err, payload: string | JwtPayload) => {
 
         if (err instanceof TokenExpiredError) {
 
@@ -38,8 +56,10 @@ export async function ensureAuthenticated(req: Request, res: Response, next: Nex
 
 
 
+
+
         req.user = {
-            id: decoded.sub as string
+            id: payload.sub as string
         }
 
 

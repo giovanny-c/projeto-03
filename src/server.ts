@@ -1,7 +1,7 @@
 import "reflect-metadata"
 import express from "express"
 import cors from "cors"
-import { auth, requiresAuth } from "express-openid-connect"
+// import { auth, requiresAuth } from "express-openid-connect"
 
 import "express-async-errors"
 
@@ -28,19 +28,19 @@ app.use(express.urlencoded({ extended: true }))//front
 // app.use(express.static('public'))//front
 // app.use(methodOverride('_method'))//front
 
-app.use(auth(config))
+// app.use(auth(config))
 
 app.use("/accounts", accountRoutes)
 
 
-app.get('/', (req, res) => {
-    return res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out')
-})
-//login e out para acessar as rotas do auth
+// app.get('/', (req, res) => {
+//     return res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out')
+// })
+// //login e out para acessar as rotas do auth
 
-app.get("/auth", requiresAuth(), (req, res) => {
-    res.send(JSON.stringify(req.oidc.user))
-})
+// app.get("/auth", requiresAuth(), (req, res) => {
+//     res.send(JSON.stringify(req.oidc.user))
+// })
 
 
 app.use(errorHandler)

@@ -18,6 +18,7 @@ interface IResponse {
     }
     token: string
     refresh_token: string
+    expires_date: Date
 
 }
 
@@ -57,11 +58,16 @@ class AuthenticateUserUseCase {
         //deleta todos os tokens de outros logins
         await this.usersTokensRepository.deleteByUserId(user.id as string)
 
-        //pega a chave privada e decofica em utf-8
 
 
-        //bearer token/ id token
-        const token = issueJWT({ payload: email, subject: user.id, key: PRIV_KEY, expiresIn: process.env.EXPIRES_IN_TOKEN as string })
+
+        const expiresIn = process.env.EXPIRES_IN_TOKEN as string
+        //para mandar junto com os tokens
+        const [amount,] = expiresIn.split(" ")
+        const token_expires_date = this.dateProvider.addOrSubtractTime("add", "minutes", Number(amount))
+
+        const token = issueJWT({ payload: email, subject: user.id, key: PRIV_KEY, expiresIn })
+
 
         //refresh token 
         const refresh_token = uuidV4()// pode ser uuid?
@@ -85,7 +91,9 @@ class AuthenticateUserUseCase {
                 email
             },
             token: `Bearer ${token}`,
-            refresh_token // nao vai retornar para o usuario
+            expires_date: token_expires_date,
+            refresh_token
+
         }
 
         return tokenReturn

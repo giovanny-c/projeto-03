@@ -23,8 +23,8 @@ class DayjsDateProvider implements IDateProvider {
         return dayjs(end_date).diff(start_date, "hours") //faz a comparaçao
     }
 
-    compareIfBefore(start_date: Date, end_date: Date): boolean { //se adata passada é antes da data final
-        return dayjs(start_date).isBefore(end_date)
+    compareIfBefore(date1: Date, date2: Date): boolean { //se a data2 é antes da data1
+        return dayjs(date1).isBefore(date2)
     }
 
 

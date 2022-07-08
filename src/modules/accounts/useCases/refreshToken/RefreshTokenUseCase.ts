@@ -12,6 +12,7 @@ import { PRIV_KEY } from "../../../../../utils/keyUtils/readKeys";
 interface IResponse {
     token: string
     refresh_token: string
+    expires_date: Date
 }
 
 @injectable()
@@ -84,7 +85,13 @@ class RefreshTokenUseCase {
 
         //cria um novo token
 
-        const newToken = issueJWT({ payload: email, subject: user_id, key: PRIV_KEY, expiresIn: process.env.EXPIRES_IN_TOKEN as string })
+        const expiresIn = process.env.EXPIRES_IN_TOKEN as string
+        //para mandar junto com os tokens
+        const [amount,] = expiresIn.split(" ")
+        const token_expires_date = this.dateProvider.addOrSubtractTime("add", "minutes", Number(amount))
+
+        const newToken = issueJWT({ payload: email, subject: user_id, key: PRIV_KEY, expiresIn })
+
 
         //cria um novo rf
         const newRefresh_token = uuidV4()
@@ -105,7 +112,8 @@ class RefreshTokenUseCase {
 
         return {
             token: `Bearer ${newToken}`,
-            refresh_token: newRefreshToken.token // nao retorna 
+            expires_date: token_expires_date,
+            refresh_token: newRefreshToken.token
         }
     }
 
