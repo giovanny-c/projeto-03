@@ -85,12 +85,9 @@ class RefreshTokenUseCase {
 
         //cria um novo token
 
-        const expiresIn = process.env.EXPIRES_IN_TOKEN as string
-        //para mandar junto com os tokens
-        const [amount,] = expiresIn.split(" ")
-        const token_expires_date = this.dateProvider.addOrSubtractTime("add", "minutes", Number(amount))
+        const jwtId = uuidV4()
 
-        const newToken = issueJWT({ payload: email, subject: user_id, key: PRIV_KEY, expiresIn })
+        const newToken = issueJWT({ payload: email, subject: user_id, jwtid: jwtId, key: PRIV_KEY, expiresIn: process.env.EXPIRES_IN_TOKEN as string })
 
 
         //cria um novo rf
@@ -106,7 +103,8 @@ class RefreshTokenUseCase {
             user_id: user_id as string,
             is_valid: true,
             was_used: false,
-            token_family: refreshToken.token_family //mesma familia
+            token_family: refreshToken.token_family, //mesma familia
+            access_token_pair_id: jwtId
         })
 
 

@@ -34,6 +34,10 @@ class UsersTokens {
     @Column()
     token_family: string
 
+    @Column()
+    access_token_pair_id: string
+
+
 
 
 }

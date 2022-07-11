@@ -56,23 +56,22 @@ class AuthenticateUserUseCase {
         await this.usersRepository.markUserAsLogged(user.id as string)
 
         //deleta todos os tokens de outros logins
+        //deletar ao logar ou deletar ao expirar(fazer func para isso no bd) ??? 
         await this.usersTokensRepository.deleteByUserId(user.id as string)
 
 
+        //-------access-token------- 
+        const jwtId = uuidV4() //id do access token
+        //manda o refresh dentro do jwt
+        const token = issueJWT({ payload: email, subject: user.id, jwtid: jwtId, key: PRIV_KEY, expiresIn: process.env.EXPIRES_IN_TOKEN as string })
 
-
-        const expiresIn = process.env.EXPIRES_IN_TOKEN as string
-        //para mandar junto com os tokens
-        const [amount,] = expiresIn.split(" ")
-        const token_expires_date = this.dateProvider.addOrSubtractTime("add", "minutes", Number(amount))
-
-        const token = issueJWT({ payload: email, subject: user.id, key: PRIV_KEY, expiresIn })
-
-
-        //refresh token 
+        //-----refresh token-------- 
         const refresh_token = uuidV4()// pode ser uuid?
 
         const token_family = uuidV4()//cria a familia do refresh token
+        //para marcar todos os tokens da mesma familia como invalidos, caso algum tenha sido usado mais de uma vez
+        //é necessario ???
+
         const refresh_token_expires_date = this.dateProvider.addOrSubtractTime("add", "day", Number(process.env.EXPIRES_REFRESH_TOKEN_DAYS))
 
         await this.usersTokensRepository.create({
@@ -81,8 +80,11 @@ class AuthenticateUserUseCase {
             user_id: user.id as string,
             is_valid: true,
             was_used: false,
-            token_family
+            token_family,
+            access_token_pair_id: jwtId //poe o id do access token no refresh-token para atrelar os dois, 
+            //tem que usar o mesmo par para fazer um refresh
         })
+
 
 
         const tokenReturn: IResponse = {
