@@ -12,7 +12,7 @@ import { PRIV_KEY } from "../../../../../utils/keyUtils/readKeys";
 interface IResponse {
     token: string
     refresh_token: string
-    expires_date: Date
+    // expires_date: Date
 }
 
 @injectable()
@@ -112,7 +112,7 @@ class RefreshTokenUseCase {
 
         return {
             token: `Bearer ${newToken}`,
-            expires_date: token_expires_date,
+            // expires_date: token_expires_date,
             refresh_token: newRefreshToken.token
         }
     }
