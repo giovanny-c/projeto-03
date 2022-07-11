@@ -7,7 +7,7 @@ class GetProfileController {
 
     async handle(req: Request, res: Response): Promise<Response> {
 
-        const { id } = req.user
+        const { id } = req.user || req.body
 
         const getProfile = container.resolve(GetProfileUseCase)
 

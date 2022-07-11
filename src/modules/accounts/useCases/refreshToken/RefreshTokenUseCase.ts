@@ -30,7 +30,7 @@ class RefreshTokenUseCase {
     }
 
     async execute(refresh_token: string): Promise<IResponse> {
-        console.log("refresh")
+
 
         const refreshToken = await this.usersTokensRepository.findByRefreshToken(refresh_token)
 
@@ -95,7 +95,7 @@ class RefreshTokenUseCase {
 
         //cria um novo rf
         const newRefresh_token = uuidV4()
-        console.log(refresh_token)
+
         const refresh_token_expires_date = this.dateProvider.addOrSubtractTime("add", "day", Number(process.env.EXPIRES_REFRESH_TOKEN_DAYS))
 
 

@@ -71,7 +71,7 @@ class AuthenticateUserUseCase {
 
         //refresh token 
         const refresh_token = uuidV4()// pode ser uuid?
-        console.log(refresh_token)
+
         const token_family = uuidV4()//cria a familia do refresh token
         const refresh_token_expires_date = this.dateProvider.addOrSubtractTime("add", "day", Number(process.env.EXPIRES_REFRESH_TOKEN_DAYS))
 

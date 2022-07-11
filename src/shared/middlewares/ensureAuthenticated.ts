@@ -2,41 +2,69 @@ import { NextFunction, Request, Response } from "express";
 import { JsonWebTokenError, JwtPayload, TokenExpiredError, verify } from "jsonwebtoken";
 import { AppError } from "../errors/AppError";
 import { PUB_KEY } from "../../../utils/keyUtils/readKeys";
+import axios from "axios";
 
+
+const dayjs = require("dayjs")
+const utc = require('dayjs/plugin/utc')
+const timezone = require('dayjs/plugin/timezone')
+
+dayjs.extend(utc)
+dayjs.extend(timezone)
+dayjs.tz.setDefault("America/Sao_Paulo")//timezone
+
+interface IRefreshTokenResponse {
+    token: string
+    expires_date: Date
+    refresh_token: string
+}
 
 export async function ensureAuthenticated(req: Request, res: Response, next: NextFunction) {
 
-
     //se o token tiver expirado fazer logica do refresh token
-    const bearerToken = req.headers.authorization
+    let bearerToken = req.headers.authorization
     const expires_date = req.headers["expires_date"]
     const refresh_token = req.headers["refresh_token"]
+    let refreshTokenResponse: IRefreshTokenResponse
 
     if (!bearerToken) {
         throw new AppError("Token missing", 400)
     }
 
-    const [, token] = bearerToken.split(" ")
-
-    //pegar o tempo de expiração que deve ser mandado junto ao token
-    //comparar pra ver se ja venceu
-    //se sim, pular essa verificaçao com o verify
-    //e passar pelo /refresh-token
-
-
-
     if (!expires_date) {
         throw new AppError("Unable to authenticate, please log in again")
     }
 
-    //fazer a comparação sem usar o provider
-    // if (dayjs.compareIfBefore(dayjs.dateNow(), dayjs.convertToDate(expires_date as string))) {
+    const dateNow = dayjs.tz(dayjs().toDate())
+    if (dayjs(expires_date).isBefore(dateNow)) {
+        console.log(`data ${expires_date} e antes de agora: ${dateNow}`)
 
-    //     console.log(`a data ${expires_date} e antes de ${dayjs.dateNow()}`)
-
-    // }
+        try {
 
 
+            const { data } = await axios({
+                method: "post",
+                url: "http://localhost:3333/accounts/refresh-token",
+                headers: {
+                    ["refresh_token"]: refresh_token as string
+                }
+
+            })
+            //testar erros do request de refresh token
+
+            refreshTokenResponse = data
+
+            bearerToken = refreshTokenResponse.token
+
+            console.log(refreshTokenResponse)
+
+        } catch (error) {
+            throw error
+        }
+    }
+
+
+    let [, token] = bearerToken.split(" ")
 
     verify(token, PUB_KEY, { algorithms: ["RS256"] }, (err, payload: string | JwtPayload) => {
 

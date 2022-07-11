@@ -7,7 +7,7 @@ class RefreshTokenController {
 
     async handle(req: Request, res: Response): Promise<Response> {
 
-        const token = req.body.token || req.query.token || req.headers['x-access-token']
+        const token = req.body.token || req.query.token || req.headers["refresh_token"]
 
         const refreshToken = container.resolve(RefreshTokenUseCase)
 
