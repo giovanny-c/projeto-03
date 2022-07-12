@@ -1,6 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import { getExecutionTime } from "../../../../../utils/decorators/executionTime";
 import { inspect } from "../../../../../utils/decorators/inspect";
+import { AppError } from "../../../../shared/errors/AppError";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
 
 interface UserResponse {
@@ -21,6 +22,10 @@ class GetProfileUseCase {
     @inspect()
     @getExecutionTime() // modifica o execTime primeiro e depois o inspect 
     async execute(id: string): Promise<UserResponse> {
+
+        if (!id) {
+            throw new AppError("Id missing, please Log-in", 400)
+        }
 
         const user = await this.usersRepository.findById(id)
 
