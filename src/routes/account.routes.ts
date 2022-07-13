@@ -41,14 +41,6 @@ accountRoutes.post("/log-out", ensureAuthenticated, logOutController.handle)
 accountRoutes.post("/forgot-password", upload.none(), sendForgotPasswordMailController.handle)
 accountRoutes.post("/retrieve-password", upload.none(), retrievePasswordController.handle)
 accountRoutes.post("/gen-pdf", ensureAuthenticated, upload.none(), generatePdfController.handle)
-accountRoutes.get("/test", (req, res) => {
 
-    return res.json("teste, teste, 123")
-})
 
-//como mandar do ensureAuthenticated para /refresh-token?
-
-//header 
-//authorization: Bearer sd1a1s432das-34fdsfdes...
-//refresh_token: 42jdf944jhr-23fd3d.....
 export { accountRoutes }

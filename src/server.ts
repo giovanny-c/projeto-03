@@ -16,7 +16,7 @@ import "./shared/container"
 //routes
 import { errorHandler } from "./shared/errors/ErrorHandler" //colocar em cima?
 import { accountRoutes } from "./routes/account.routes"
-import { config } from "../src/config/auth"
+//import { config } from "../src/config/auth"
 
 
 const app = express()
@@ -31,16 +31,6 @@ app.use(express.urlencoded({ extended: true }))//front
 // app.use(auth(config))
 
 app.use("/accounts", accountRoutes)
-
-
-// app.get('/', (req, res) => {
-//     return res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out')
-// })
-// //login e out para acessar as rotas do auth
-
-// app.get("/auth", requiresAuth(), (req, res) => {
-//     res.send(JSON.stringify(req.oidc.user))
-// })
 
 
 app.use(errorHandler)

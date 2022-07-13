@@ -85,9 +85,9 @@ class RefreshTokenUseCase {
 
         //cria um novo token
 
-        const jwtId = uuidV4()
 
-        const newToken = issueJWT({ payload: email, subject: user_id, jwtid: jwtId, key: PRIV_KEY, expiresIn: process.env.EXPIRES_IN_TOKEN as string })
+
+        const newToken = issueJWT({ payload: email, subject: user_id, key: PRIV_KEY, expiresIn: process.env.EXPIRES_IN_TOKEN as string })
 
 
         //cria um novo rf
@@ -104,7 +104,6 @@ class RefreshTokenUseCase {
             is_valid: true,
             was_used: false,
             token_family: refreshToken.token_family, //mesma familia
-            access_token_pair_id: jwtId
         })
 
 

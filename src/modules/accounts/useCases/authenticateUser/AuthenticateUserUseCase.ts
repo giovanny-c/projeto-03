@@ -61,9 +61,9 @@ class AuthenticateUserUseCase {
 
 
         //-------access-token------- 
-        const jwtId = uuidV4() //id do access token
+
         //manda o refresh dentro do jwt
-        const token = issueJWT({ payload: email, subject: user.id, jwtid: jwtId, key: PRIV_KEY, expiresIn: process.env.EXPIRES_IN_TOKEN as string })
+        const token = issueJWT({ payload: email, subject: user.id, key: PRIV_KEY, expiresIn: process.env.EXPIRES_IN_TOKEN as string })
 
         //-----refresh token-------- 
         const refresh_token = uuidV4()// pode ser uuid?
@@ -81,8 +81,7 @@ class AuthenticateUserUseCase {
             is_valid: true,
             was_used: false,
             token_family,
-            access_token_pair_id: jwtId //poe o id do access token no refresh-token para atrelar os dois, 
-            //tem que usar o mesmo par para fazer um refresh
+
         })
 
 
