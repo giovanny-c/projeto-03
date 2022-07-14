@@ -10,13 +10,13 @@ interface IRefreshTokenResponse {
     refresh_token: string
 }
 
-interface IJwtPayload {
-    payload: string
-    iat: number
-    exp: number,
-    sub: string,
-    jwt: string
-}
+// interface IJwtPayload {
+//     payload: string
+//     iat: number
+//     exp: number,
+//     sub: string,
+//     jwt: string
+// }
 export async function ensureAuthenticated(req: Request, res: Response, next: NextFunction) {
 
 
@@ -24,7 +24,7 @@ export async function ensureAuthenticated(req: Request, res: Response, next: Nex
     const refresh_token = req.headers["refresh_token"]
 
     let refreshTokenResponse: IRefreshTokenResponse
-    let payload: IJwtPayload
+
 
     if (!bearerToken || !refresh_token) {
         throw new AppError("Token missing", 400)
@@ -34,10 +34,10 @@ export async function ensureAuthenticated(req: Request, res: Response, next: Nex
 
 
     try {
-        payload = verify(token, PUB_KEY, { algorithms: ["RS256"] }) as IJwtPayload
+        const { sub: user_id } = verify(token, PUB_KEY, { algorithms: ["RS256"] }) as JwtPayload
 
         req.user = {//nao seta se o token expirar
-            id: payload.sub as string
+            id: user_id as string
         }
 
     } catch (err) {
@@ -65,11 +65,11 @@ export async function ensureAuthenticated(req: Request, res: Response, next: Nex
 
                 // ??? fazer outro verify para o token novo ou passar o id do user 
                 //na response de /refresh-token ???
-                verify(token, PUB_KEY, { algorithms: ["RS256"] }, (err, payload: string | JwtPayload) => {
+                verify(token, PUB_KEY, { algorithms: ["RS256"] }, (err, { sub: user_id }: string | JwtPayload) => {
                     if (err) throw err
 
                     req.user = {
-                        id: payload.sub as string
+                        id: user_id as string
                     }
 
 

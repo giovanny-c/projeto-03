@@ -3,7 +3,7 @@ import { genPassword } from "../../../../../utils/password/passwordUtils";
 
 import { AppError } from "../../../../shared/errors/AppError";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
-import { JsonWebTokenError, TokenExpiredError, verify } from "jsonwebtoken";
+import { JsonWebTokenError, JwtPayload, TokenExpiredError, verify } from "jsonwebtoken";
 import { PUB_KEY } from "../../../../../utils/keyUtils/readKeys";
 
 @injectable()
@@ -25,13 +25,13 @@ class RetrievePasswordUseCase {
         try {
 
 
-
-            const user_id = verify(token, PUB_KEY, { algorithms: ["RS256"] })
+            //como impedir que o token seja usado de novo?
+            const { sub: user_id } = verify(token, PUB_KEY, { algorithms: ["RS256"] }) as JwtPayload
 
             const { salt, hash } = genPassword(password)
 
             await this.userRepository.create({
-                id: user_id.sub as string,
+                id: user_id as string,
                 password_hash: hash,
                 salt
             })

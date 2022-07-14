@@ -1,4 +1,4 @@
-import { JsonWebTokenError, TokenExpiredError, verify } from "jsonwebtoken";
+import { JsonWebTokenError, JwtPayload, TokenExpiredError, verify } from "jsonwebtoken";
 import { inject, injectable } from "tsyringe";
 
 
@@ -23,9 +23,9 @@ class ConfirmateRegisterUseCase {
 
         try {
 
-            const user_id = verify(confirmationToken, PUB_KEY, { algorithms: ["RS256"] })
+            const { sub: user_id } = verify(confirmationToken, PUB_KEY, { algorithms: ["RS256"] }) as JwtPayload
 
-            const user = await this.usersRepository.findById(user_id.sub as string)
+            const user = await this.usersRepository.findById(user_id as string)
 
             user.is_confirmed = true
 
