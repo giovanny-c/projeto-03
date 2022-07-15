@@ -1,7 +1,7 @@
 import { NextFunction, Request, response, Response } from "express";
 import { JsonWebTokenError, JwtPayload, TokenExpiredError, verify } from "jsonwebtoken";
 import { AppError } from "../errors/AppError";
-import { PUB_KEY } from "../../../utils/keyUtils/readKeys";
+import { PUB_KEY } from "../../utils/keyUtils/readKeys";
 import axios from "axios";
 
 

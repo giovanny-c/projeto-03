@@ -2,7 +2,7 @@ import { inject, injectable } from "tsyringe";
 import { ICreateUserDTO } from "../../dtos/ICreateUserDTO";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
 import { AppError } from "../../../../shared/errors/AppError";
-import { genPassword } from "../../../../../utils/password/passwordUtils"
+import { genPassword } from "../../../../utils/password/passwordUtils"
 
 
 @injectable()

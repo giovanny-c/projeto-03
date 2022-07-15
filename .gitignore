@@ -3,4 +3,5 @@ node_modules
 dist
 tmp
 .vscode
+coverage
 keys/id_rsa_priv.pem

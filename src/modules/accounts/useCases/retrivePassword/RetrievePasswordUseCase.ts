@@ -1,10 +1,10 @@
 import { inject, injectable } from "tsyringe";
-import { genPassword } from "../../../../../utils/password/passwordUtils";
+import { genPassword } from "../../../../utils/password/passwordUtils";
 
 import { AppError } from "../../../../shared/errors/AppError";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
 import { JsonWebTokenError, JwtPayload, TokenExpiredError, verify } from "jsonwebtoken";
-import { PUB_KEY } from "../../../../../utils/keyUtils/readKeys";
+import { PUB_KEY } from "../../../../utils/keyUtils/readKeys";
 
 @injectable()
 class RetrievePasswordUseCase {

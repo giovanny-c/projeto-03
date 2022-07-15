@@ -16,9 +16,9 @@ function genKeyPair() {
         }
     })
 
-    fs.writeFileSync("../../keys" + "/id_rsa_pub.pem", keyPair.publicKey)
-    fs.writeFileSync("../../keys" + "/id_rsa_priv.pem", keyPair.privateKey)
-
+    fs.writeFileSync("../../../keys" + "/id_rsa_pub.pem", keyPair.publicKey)
+    fs.writeFileSync("../../../keys" + "/id_rsa_priv.pem", keyPair.privateKey)
+    //para salvar em uma pasta fora de src
 }
 
 genKeyPair()

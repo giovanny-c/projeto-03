@@ -6,8 +6,8 @@ import { IUsersTokensRepository } from "../../repositories/IUsersTokensRepositor
 import { IDateProvider } from "../../../../shared/container/providers/dateProvider/IDateProvider";
 import { AppError } from "../../../../shared/errors/AppError";
 import { v4 as uuidV4 } from "uuid"
-import issueJWT from "../../../../../utils/tokensUtils/issueJWT";
-import { PRIV_KEY } from "../../../../../utils/keyUtils/readKeys";
+import issueJWT from "../../../../utils/tokensUtils/issueJWT";
+import { PRIV_KEY } from "../../../../utils/keyUtils/readKeys";
 
 interface IResponse {
     token: string

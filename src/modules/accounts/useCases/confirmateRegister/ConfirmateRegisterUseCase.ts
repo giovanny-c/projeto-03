@@ -4,7 +4,7 @@ import { inject, injectable } from "tsyringe";
 
 import { UsersRepository } from "../../repositories/implementations/UsersRepository";
 import * as fs from "fs"
-import { PUB_KEY } from "../../../../../utils/keyUtils/readKeys";
+import { PUB_KEY } from "../../../../utils/keyUtils/readKeys";
 
 
 

@@ -2,8 +2,8 @@ import { inject, injectable } from "tsyringe";
 import { IMailProvider } from "../../../../shared/container/providers/mailProvider/IMailProvider";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
 import { resolve } from "path";
-import issueJWT from "../../../../../utils/tokensUtils/issueJWT";
-import { PRIV_KEY } from "../../../../../utils/keyUtils/readKeys";
+import issueJWT from "../../../../utils/tokensUtils/issueJWT";
+import { PRIV_KEY } from "../../../../utils/keyUtils/readKeys";
 
 @injectable()
 class SendConfirmationRegisterMailUseCase {

@@ -1,6 +1,6 @@
 import { inject, injectable } from "tsyringe";
-import { getExecutionTime } from "../../../../../utils/decorators/executionTime";
-import { inspect } from "../../../../../utils/decorators/inspect";
+import { getExecutionTime } from "../../../../utils/decorators/executionTime";
+import { inspect } from "../../../../utils/decorators/inspect";
 import { AppError } from "../../../../shared/errors/AppError";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
 

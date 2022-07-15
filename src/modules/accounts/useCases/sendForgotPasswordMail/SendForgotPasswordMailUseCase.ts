@@ -4,8 +4,8 @@ import { inject, injectable } from "tsyringe";
 import { IMailProvider } from "../../../../shared/container/providers/mailProvider/IMailProvider";
 import { AppError } from "../../../../shared/errors/AppError";
 import { IUsersRepository } from "../../repositories/IUsersRepository"
-import issueJWT from "../../../../../utils/tokensUtils/issueJWT";
-import { PRIV_KEY } from "../../../../../utils/keyUtils/readKeys";
+import issueJWT from "../../../../utils/tokensUtils/issueJWT";
+import { PRIV_KEY } from "../../../../utils/keyUtils/readKeys";
 
 @injectable()
 class SendForgotPasswordMailUseCase {

@@ -71,3 +71,5 @@ class UsersTokensRepositoryInMemory implements IUsersTokensRepository {
     }
 
 }
+
+export { UsersTokensRepositoryInMemory }
