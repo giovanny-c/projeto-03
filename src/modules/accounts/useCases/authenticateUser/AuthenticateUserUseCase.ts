@@ -45,6 +45,10 @@ class AuthenticateUserUseCase {
             throw new AppError("email or password incorrect")
         }
 
+        if (!user.is_confirmed) {
+            throw new AppError("You need to confirm your account before you loggin for the first time. Please check your email for the confirmation register email", 400)
+        }
+
 
         //const passwordMatch = await compare(password, user.password)
 

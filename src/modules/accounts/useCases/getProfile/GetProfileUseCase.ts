@@ -24,11 +24,14 @@ class GetProfileUseCase {
     async execute(id: string): Promise<UserResponse> {
 
         if (!id) {
-            throw new AppError("Id missing, please Log-in", 400)
+            throw new AppError("Id missing", 400)
         }
 
         const user = await this.usersRepository.findById(id)
 
+        if (!user) {
+            throw new AppError("User not found", 400)
+        }
 
 
         return {
