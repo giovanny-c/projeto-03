@@ -1,11 +1,7 @@
-/*
- * For a detailed explanation regarding each configuration property and type check, visit:
- * https://jestjs.io/docs/configuration
- */
 
-
-import { pathsToModuleNameMapper } from "ts-jest/dist/config"
+import { pathsToModuleNameMapper } from "ts-jest/dist/config/paths-to-module-name-mapper"
 import { compilerOptions } from "./tsconfig.json"
+
 export default {
   // All imported modules in your tests should be mocked automatically
   // automock: false,
@@ -24,9 +20,8 @@ export default {
 
   // An array of glob patterns indicating a set of files for which coverage information should be collected
   collectCoverageFrom: [
-    "<rootDir>/src/modules/**/useCase/**/*.ts>"
+    "<rootDir>/src/modules/**/useCases/**/*.ts"
   ],
-
   // The directory where Jest should output its coverage files
   coverageDirectory: "coverage",
 
@@ -40,7 +35,7 @@ export default {
 
   // A list of reporter names that Jest uses when writing coverage reports
   coverageReporters: [
-    "text-sumary",
+    //"text-sumary",
     "lcov",
 
   ],
@@ -104,7 +99,7 @@ export default {
   // notifyMode: "failure-change",
 
   // A preset that is used as a base for Jest's configuration
-  // preset: undefined,
+  preset: "ts-jest",
 
   // Run tests from one or more projects
   // projects: undefined,
@@ -136,7 +131,7 @@ export default {
   // runner: "jest-runner",
 
   // The paths to modules that run some code to configure or set up the testing environment before each test
-  // setupFiles: [],
+  setupFiles: ["dotenv/config"],
 
   // A list of paths to modules that run some code to configure or set up the testing framework before each test
   // setupFilesAfterEnv: [],
@@ -157,10 +152,9 @@ export default {
   // testLocationInResults: false,
 
   // The glob patterns Jest uses to detect test files
-  // testMatch: [
-  //   "**/__tests__/**/*.[jt]s?(x)",
-  //   "**/?(*.)+(spec|test).[tj]s?(x)"
-  // ],
+  testMatch: [
+    "**/*.spec.ts"
+  ],
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
   // testPathIgnorePatterns: [

@@ -22,6 +22,8 @@ function genKeyPair() {
 }
 
 genKeyPair()
+
+
 //navegar até a pasta aonde este esse arquivo
 // e digitar no terminal: node generateKeypair.ts
 
