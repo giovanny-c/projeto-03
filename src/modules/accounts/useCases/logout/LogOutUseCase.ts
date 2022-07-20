@@ -21,7 +21,7 @@ class LogOutUseCase {
     async execute(user_id: string): Promise<void> {
         try {
 
-            const user = this.usersRepository.findById(user_id)
+            const user = await this.usersRepository.findById(user_id)
 
             if (!user) {
                 throw new AppError("User not found", 400)
