@@ -60,7 +60,6 @@ class RefreshTokenUseCase {
 
 
         }
-
         //se venceu
         if (this.dateProvider.compareIfBefore(refreshToken.expires_date, this.dateProvider.dateNow())) {
             //marca como usado e invalido

@@ -1,6 +1,7 @@
 import { UsersRepositoryInMemory } from "@modules/accounts/repositories/In-memory/UsersRepositoryInMemory"
 import { UsersTokensRepositoryInMemory } from "@modules/accounts/repositories/In-memory/UsersTokensRepositoryInMemory"
 import { DayjsDateProvider } from "@shared/container/providers/dateProvider/implementations/DayjsDateProvider"
+import { AppError } from "@shared/errors/AppError"
 import { RefreshTokenUseCase } from "./RefreshTokenUseCase"
 
 
@@ -19,7 +20,7 @@ describe("Receive a token, check if it is valid, and generate a new pair of toke
 
     })
 
-    it("It should validate a token, and generate a new pair of tokens", async () => {
+    it("Should receive a refresh token and if it is not expired, used or invalid, generate a new pair of tokens, and revoke the refresh-token received", async () => {
 
         const user = await usersRepositoryInMemory.create({
             name: "test",
@@ -39,18 +40,75 @@ describe("Receive a token, check if it is valid, and generate a new pair of toke
             was_used: false,
         })
 
+
         const response = await refreshTokenUseCase.execute(refresh_token.token)
 
-
+        //generated token pair
         expect(response).toHaveProperty("token")
         expect(response.token).toMatch(/\S+\s\S+\.\S+\.\S+/) // ex: bearer sadsad.sdadsad.dasdas
 
         expect(response).toHaveProperty("refresh_token")
         expect(response.refresh_token).toMatch(/\S+\-\S+\-\S+\-\S+\-\S+/)// ex d32d23-3d23d23-d32d32-d23d23d23-d23d2d2
 
+        //received refresh_token
+        const received_token = await usersTokensRepositoryInMemory.findByUserIdAndRefreshToken({ user_id: user.id as string, token: refresh_token.token })
+        expect(received_token).toHaveProperty("is_valid", false)
+        expect(received_token).toHaveProperty("was_used", true)
+
+        // new refresh token
+        const newRefresToken = await usersTokensRepositoryInMemory.findByUserIdAndRefreshToken({ user_id: user.id as string, token: response.refresh_token })
+        expect(newRefresToken).toHaveProperty("is_valid", true)
+        expect(newRefresToken).toHaveProperty("was_used", false)
+        expect(dateProvider.compareDiferenceIn(dateProvider.dateNow(), newRefresToken.expires_date, "day")).toBeGreaterThan(29)
+
 
 
 
     })
+
+    it("Should revoke the received refresh token with a expired date, and revoke all the other tokens of the same family", async () => {
+
+        const user = await usersRepositoryInMemory.create({
+            name: "test",
+            email: "test@email.com",
+            password_hash: "asdadsdas",
+            salt: "dsadasdas",
+            is_confirmed: true
+        })
+
+
+        const refresh_token_1 = await usersTokensRepositoryInMemory.create({
+            expires_date: dateProvider.addOrSubtractTime("sub", "hour", 1),
+            user_id: user.id as string,
+            token: "21312e32e32d",
+            token_family: "asdaefe223r",
+            is_valid: true,
+            was_used: false,
+        })
+
+        const refresh_token_2 = await usersTokensRepositoryInMemory.create({
+            expires_date: dateProvider.addOrSubtractTime("sub", "hour", 1),
+            user_id: user.id as string,
+            token: "21312e32e32d",
+            token_family: "asdaefe223r",
+            is_valid: true,
+            was_used: false,
+        })
+
+
+        await expect(
+
+            refreshTokenUseCase.execute(refresh_token_2.token)
+
+        ).rejects.toEqual(new AppError("Conection expired (token expired). Please Log-in again. ", 401))
+
+        //if tokens got revoke
+        expect(await usersTokensRepositoryInMemory.findByUserIdAndRefreshToken({ user_id: user.id as string, token: refresh_token_1.token })).toHaveProperty("is_valid", false)
+        expect(await usersTokensRepositoryInMemory.findByUserIdAndRefreshToken({ user_id: user.id as string, token: refresh_token_2.token })).toHaveProperty("is_valid", false)
+
+    })
+
+
+    //todo if was_used, is_invalid, exists
 
 })
