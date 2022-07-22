@@ -108,7 +108,114 @@ describe("Receive a token, check if it is valid, and generate a new pair of toke
 
     })
 
+    it("Should revoke the received refresh token with a invalid status, and revoke all the other tokens of the same family", async () => {
+        const user = await usersRepositoryInMemory.create({
+            name: "test",
+            email: "test@email.com",
+            password_hash: "asdadsdas",
+            salt: "dsadasdas",
+            is_confirmed: true
+        })
 
-    //todo if was_used, is_invalid, exists
+
+        const refresh_token_1 = await usersTokensRepositoryInMemory.create({
+            expires_date: dateProvider.addOrSubtractTime("add", "hour", 1),
+            user_id: user.id as string,
+            token: "21312e32e32d",
+            token_family: "asdaefe223r",
+            is_valid: true,
+            was_used: false,
+        })
+
+        const refresh_token_2 = await usersTokensRepositoryInMemory.create({
+            expires_date: dateProvider.addOrSubtractTime("add", "hour", 1),
+            user_id: user.id as string,
+            token: "21312e32edgfgdfg2d",
+            token_family: "asdaefe223r",
+            is_valid: false,
+            was_used: false,
+        })
+
+
+        await expect(
+
+            refreshTokenUseCase.execute(refresh_token_2.token)
+
+        ).rejects.toEqual(new AppError("Conection expired (Invalid token). Please Log-in again", 401))
+
+        //if tokens got revoke
+        expect(await usersTokensRepositoryInMemory.findByUserIdAndRefreshToken({ user_id: user.id as string, token: refresh_token_1.token })).toHaveProperty("is_valid", false)
+        expect(await usersTokensRepositoryInMemory.findByUserIdAndRefreshToken({ user_id: user.id as string, token: refresh_token_2.token })).toHaveProperty("is_valid", false)
+    })
+
+
+    it("Should revoke the received refresh token that was already used, and revoke all the other tokens of the same family", async () => {
+        const user = await usersRepositoryInMemory.create({
+            name: "test",
+            email: "test@email.com",
+            password_hash: "asdadsdas",
+            salt: "dsadasdas",
+            is_confirmed: true
+        })
+
+
+        const refresh_token_1 = await usersTokensRepositoryInMemory.create({
+            expires_date: dateProvider.addOrSubtractTime("add", "hour", 1),
+            user_id: user.id as string,
+            token: "21312e32e32d",
+            token_family: "asdaefe223r",
+            is_valid: true,
+            was_used: true,
+        })
+
+        const refresh_token_2 = await usersTokensRepositoryInMemory.create({
+            expires_date: dateProvider.addOrSubtractTime("add", "hour", 1),
+            user_id: user.id as string,
+            token: "21312e3grge32d",
+            token_family: "asdaefe223r",
+            is_valid: true,
+            was_used: true,
+        })
+
+
+        await expect(
+
+            refreshTokenUseCase.execute(refresh_token_2.token)
+
+        ).rejects.toEqual(new AppError("Conection expired (used token). Please Log-in again. ", 401))
+
+        //if tokens got revoke
+        expect(await usersTokensRepositoryInMemory.findByUserIdAndRefreshToken({ user_id: user.id as string, token: refresh_token_1.token })).toHaveProperty("is_valid", false)
+        expect(await usersTokensRepositoryInMemory.findByUserIdAndRefreshToken({ user_id: user.id as string, token: refresh_token_2.token })).toHaveProperty("is_valid", false)
+    })
+
+
+    it("Should receive a unexisting refresh token, and throw a error", async () => {
+        const user = await usersRepositoryInMemory.create({
+            name: "test",
+            email: "test@email.com",
+            password_hash: "asdadsdas",
+            salt: "dsadasdas",
+            is_confirmed: true
+        })
+
+        const refresh_token = await usersTokensRepositoryInMemory.create({
+            expires_date: dateProvider.addOrSubtractTime("add", "hour", 1),
+            user_id: user.id as string,
+            token: "21312e32e32d",
+            token_family: "asdaefe223r",
+            is_valid: true,
+            was_used: true,
+        })
+
+        const invalid_token = "edsf4f44x3434t3433"
+
+        await expect(
+
+            refreshTokenUseCase.execute(invalid_token)
+
+        ).rejects.toEqual(new AppError("Token missing or invalid token, Please Log-in", 400))
+
+    })
 
 })

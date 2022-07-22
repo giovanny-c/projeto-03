@@ -1,3 +1,4 @@
+
 import { ICreateUserTokenDTO } from "../../dtos/ICreateUserTokenDTO";
 import { ISetTokenFamilyInvalidDTO } from "../../dtos/ISetTokenFamilyInvalidDTO";
 import { UsersTokens } from "../../entities/UsersTokens";
@@ -59,13 +60,22 @@ class UsersTokensRepositoryInMemory implements IUsersTokensRepository {
     }
     async setTokenFamilyAsInvalid({ token_family, user_id }: ISetTokenFamilyInvalidDTO): Promise<void> {
 
-        this.usersTokens.forEach(token => {
+
+        let indexes = this.usersTokens.map(token => {
 
             if (token.token_family === token_family && token.user_id === user_id) {
-                token.is_valid = false
+
+                return this.usersTokens.indexOf(token)
             }
 
         });
+
+
+        indexes.forEach((index: number) => {
+            this.usersTokens[index].is_valid = false
+        });
+
+
 
 
     }
