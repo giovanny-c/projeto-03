@@ -2,9 +2,9 @@ import { JsonWebTokenError, JwtPayload, TokenExpiredError, verify } from "jsonwe
 import { inject, injectable } from "tsyringe";
 
 
-import { UsersRepository } from "../../repositories/implementations/UsersRepository";
-import * as fs from "fs"
+
 import { PUB_KEY } from "../../../../utils/keyUtils/readKeys";
+import { IUsersRepository } from "@modules/accounts/repositories/IUsersRepository";
 
 
 
@@ -13,7 +13,7 @@ class ConfirmateRegisterUseCase {
 
     constructor(
         @inject("UsersRepository")
-        private usersRepository: UsersRepository,
+        private usersRepository: IUsersRepository,
 
     ) {
 
@@ -29,7 +29,7 @@ class ConfirmateRegisterUseCase {
 
             user.is_confirmed = true
 
-            await this.usersRepository.create(user)
+            await this.usersRepository.create(user)//update no is_confirmed
 
         } catch (err) {
             if (err instanceof TokenExpiredError) {

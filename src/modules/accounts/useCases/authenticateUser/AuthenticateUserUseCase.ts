@@ -5,7 +5,7 @@ import { IUsersRepository } from "../../repositories/IUsersRepository";
 import { IUsersTokensRepository } from "../../repositories/IUsersTokensRepository";
 import { v4 as uuidV4 } from "uuid"
 import { AppError } from "../../../../shared/errors/AppError";
-import { validatePassword } from "../../../../utils/password/passwordUtils";
+import { validatePassword } from "../../../../utils/passwordUtils/passwordUtils";
 import issueJWT from "../../../../utils/tokensUtils/issueJWT";
 import { PRIV_KEY } from "../../../../utils/keyUtils/readKeys";
 

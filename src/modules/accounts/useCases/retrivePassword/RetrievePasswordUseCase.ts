@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import { genPassword } from "../../../../utils/password/passwordUtils";
+import { genPassword } from "../../../../utils/passwordUtils/passwordUtils";
 
 import { AppError } from "../../../../shared/errors/AppError";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
