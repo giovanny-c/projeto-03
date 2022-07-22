@@ -61,20 +61,15 @@ class UsersTokensRepositoryInMemory implements IUsersTokensRepository {
     async setTokenFamilyAsInvalid({ token_family, user_id }: ISetTokenFamilyInvalidDTO): Promise<void> {
 
 
-        let indexes = this.usersTokens.map(token => {
+        this.usersTokens.forEach(token => {
 
-            if (token.token_family === token_family && token.user_id === user_id) {
+            if (token.token_family === token_family) {
 
-                return this.usersTokens.indexOf(token)
+                token.is_valid = false
+
             }
 
         });
-
-
-        indexes.forEach((index: number) => {
-            this.usersTokens[index].is_valid = false
-        });
-
 
 
 
