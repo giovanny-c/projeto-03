@@ -19,7 +19,7 @@ class RetrievePasswordUseCase {
     async execute(password: string, confirmPassword: string, token: string): Promise<void> {
 
         if (password !== confirmPassword) {
-            throw new AppError("Password and confirm password fields do not match")
+            throw new AppError("Password and confirm password fields do not match", 400)
         }
 
         try {

@@ -4,6 +4,7 @@ import { IUsersRepository } from "../../repositories/IUsersRepository";
 import { resolve } from "path";
 import issueJWT from "../../../../utils/tokensUtils/issueJWT";
 import { PRIV_KEY } from "../../../../utils/keyUtils/readKeys";
+import { AppError } from "@shared/errors/AppError";
 
 @injectable()
 class SendConfirmationRegisterMailUseCase {
@@ -19,23 +20,34 @@ class SendConfirmationRegisterMailUseCase {
 
     async execute(email: string) {
 
-        const user = await this.usersRepository.findByEmail(email as string)
+        try {
 
-        const templatePath = resolve(__dirname, "..", "..", "..", "..", "..", "views", "accounts", "emails", "confirmateRegister.hbs")
 
-        const token = issueJWT({ subject: user.id, key: PRIV_KEY, expiresIn: process.env.EXPIRES_IN_CONFIRAMTION_TOKEN as string })
-        console.log(token)
-        const variables = {
-            name: user.name,
-            link: `${process.env.CONFIRMATION_MAIL_URL}${token}`
+            const user = await this.usersRepository.findByEmail(email as string)
+
+            if (!user) {
+                throw new AppError("User not found", 500)
+            }
+
+            const templatePath = resolve(__dirname, "..", "..", "..", "..", "..", "views", "accounts", "emails", "confirmateRegister.hbs")
+
+            const token = issueJWT({ subject: user.id, key: PRIV_KEY, expiresIn: process.env.EXPIRES_IN_CONFIRAMTION_TOKEN as string })
+            console.log(token)
+            const variables = {
+                name: user.name,
+                link: `${process.env.CONFIRMATION_MAIL_URL}${token}`
+            }
+
+            await this.mailProvider.sendMail(
+                user.email,
+                "Confirmação de cadastro",
+                variables,
+                templatePath
+            )
+
+        } catch (error) {
+            throw error
         }
-
-        await this.mailProvider.sendMail(
-            user.email,
-            "Confirmação de cadastro",
-            variables,
-            templatePath
-        )
     }
 
 }
