@@ -26,6 +26,7 @@ describe("Get the profile of a user, with its id", () => {
 
         const userProfile = await getProfileUseCase.execute("543234321266875")
 
+
         expect(userProfile).toHaveProperty("name")
         expect(userProfile).toHaveProperty("email")
 

@@ -1,7 +1,7 @@
 import { UsersRepositoryInMemory } from "@modules/accounts/repositories/In-memory/UsersRepositoryInMemory";
 import { PRIV_KEY, PUB_KEY } from "@utils/keyUtils/readKeys";
 import issueJWT from "@utils/tokensUtils/issueJWT";
-import { JwtPayload, TokenExpiredError, verify } from "jsonwebtoken";
+import { JsonWebTokenError, JwtPayload, TokenExpiredError, verify } from "jsonwebtoken";
 import { ConfirmateRegisterUseCase } from "./ConfirmateRegisterUseCase";
 
 
@@ -52,6 +52,26 @@ describe("Receive a token, and if it is valid, change the confirmation status of
 
             confirmateRegisterUseCase.execute(token)
         ).rejects.toThrowError(TokenExpiredError)
+
+
+    })
+
+    it("Should throw an error if the token received is invalid", async () => {
+        const user = await usersRepository.create({
+            name: "test",
+            email: "test@email.com",
+            salt: "3d23d23d2d2d",
+            password_hash: "dfs23d23d23dqd21",
+            is_confirmed: false
+        })
+
+        const token = issueJWT({ subject: user.id, key: PRIV_KEY, expiresIn: "10m" })
+
+
+        await expect(
+
+            confirmateRegisterUseCase.execute("eyfw232d323.3d23d23dshhedfref.45cv45fg45f4c345f34f34")
+        ).rejects.toThrowError(JsonWebTokenError)
 
 
     })

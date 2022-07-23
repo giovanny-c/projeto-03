@@ -8,8 +8,9 @@ class UsersRepositoryInMemory implements IUsersRepository {
     users: User[] = []//inicializa o array
 
     async create({ id = uuidV4(), password_hash, name, email, salt, is_confirmed = false }: ICreateUserDTO): Promise<User> {
+        let user
 
-        const user = new User()
+        user = new User()
 
         Object.assign(user, {
             id,
@@ -20,10 +21,28 @@ class UsersRepositoryInMemory implements IUsersRepository {
             is_confirmed
         })
 
+
+        const index = this.users.findIndex(user => user.id === id)
+
+
+        if (index !== -1) {
+
+            if (password_hash && salt) {
+
+                this.users[index].password_hash = password_hash
+                this.users[index].salt = salt
+            }
+
+            return this.users[index]
+        }
+
+
         this.users.push(user)
 
         return user
     }
+
+
     async findById(id: string): Promise<User> {
 
         const user = this.users.find(user => user.id === id) as User

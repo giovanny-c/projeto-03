@@ -34,6 +34,7 @@ class GetProfileUseCase {
         }
 
 
+
         return {
             name: user.name,
             email: user.email
