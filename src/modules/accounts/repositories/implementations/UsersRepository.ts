@@ -16,26 +16,7 @@ class UsersRepository implements IUsersRepository {
 
 
 
-    async markUserAsLogged(id: string): Promise<void> {
-        const user = this.repository.create({
-            id,
-            is_logged: true
-
-        })
-
-        await this.repository.save(user)
-    }
-
-    async unmarkUserAsLogged(id: string): Promise<void> {
-        const user = this.repository.create({
-            id,
-            is_logged: false
-
-        })
-
-        await this.repository.save(user)
-    }
-
+    //voltar a criar id pelo app
     async create({ id, name, email, password_hash, salt, is_confirmed }: ICreateUserDTO): Promise<User> {
 
         const user = this.repository.create({
@@ -62,6 +43,25 @@ class UsersRepository implements IUsersRepository {
         return user as User
     }
 
+    async markUserAsLogged(id: string): Promise<void> {
+        const user = this.repository.create({
+            id,
+            is_logged: true
+
+        })
+
+        await this.repository.save(user)
+    }
+
+    async unmarkUserAsLogged(id: string): Promise<void> {
+        const user = this.repository.create({
+            id,
+            is_logged: false
+
+        })
+
+        await this.repository.save(user)
+    }
 
 }
 
