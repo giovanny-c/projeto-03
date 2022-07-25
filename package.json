@@ -6,7 +6,7 @@
   "author": "Giovanny Castanharo <giovanycast@hotmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules --respawn --poll src/server.ts",
+    "dev": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules --respawn --poll src/server.ts",
     "migration:run": "ts-node-dev ./node_modules/typeorm/cli migration:run -d \"./src/database/runMigrations.ts\" ",
     "migration:revert": "ts-node-dev ./node_modules/typeorm/cli migration:revert -d \"./src/database/runMigrations.ts\" ",
     "test": "jest"
@@ -34,7 +34,7 @@
     "pdf-lib": "^1.17.1",
     "pg": "^8.7.3",
     "reflect-metadata": "^0.1.13",
-    "ts-node-dev": "^1.1.8",
+    "ts-node-dev": "^2.0.0",
     "tsyringe": "^4.6.0",
     "typeorm": "^0.3.6",
     "uuid": "^8.3.2"

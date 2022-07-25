@@ -5,6 +5,7 @@
     "emitDecoratorMetadata": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "moduleResolution": "Node",
     "strictNullChecks": true,
@@ -28,6 +29,6 @@
       "@utils/*": [
         "utils/*"
       ]
-    },
+    }
   }
 }

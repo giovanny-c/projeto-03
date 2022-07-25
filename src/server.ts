@@ -11,10 +11,10 @@ import "express-async-errors"
 
 //db e containers
 import "./database"
-import "./shared/container"
+import "@shared/container"
 
 //routes
-import { errorHandler } from "./shared/errors/ErrorHandler" //colocar em cima?
+import { errorHandler } from "@shared/errors/ErrorHandler" //colocar em cima?
 import { accountRoutes } from "./routes/account.routes"
 //import { config } from "../src/config/auth"
 

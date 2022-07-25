@@ -1,5 +1,5 @@
 import * as fs from "fs"
-import path from "path"
+import * as path from "path"
 
 const priv_key_path = path.join(__dirname, "..", "..", "..", "keys", "id_rsa_priv.pem")
 const pub_key_path = path.join(__dirname, "..", "..", "..", "keys", "id_rsa_pub.pem")
