@@ -4,7 +4,7 @@ import { inject, injectable } from "tsyringe";
 
 
 import { PUB_KEY } from "../../../../utils/keyUtils/readKeys";
-import { IUsersRepository } from "@modules/accounts/repositories/IUsersRepository";
+import { IUsersRepository } from "../../repositories/IUsersRepository"
 
 
 

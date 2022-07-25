@@ -4,7 +4,8 @@ import { IUsersRepository } from "../../repositories/IUsersRepository";
 import { resolve } from "path";
 import issueJWT from "../../../../utils/tokensUtils/issueJWT";
 import { PRIV_KEY } from "../../../../utils/keyUtils/readKeys";
-import { AppError } from "@shared/errors/AppError";
+import { AppError } from "../../../../shared/errors/AppError";
+
 
 @injectable()
 class SendConfirmationRegisterMailUseCase {

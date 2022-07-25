@@ -3,14 +3,15 @@
     "target": "es2016",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "baseUrl": "./src",
-    "outDir": "./dist",
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "Node",
     "strictNullChecks": true,
+    "skipLibCheck": true,
+    "module": "commonjs",
+    "outDir": "./dist",
+    "baseUrl": "./src",
     "paths": {
       "@modules/*": [
         "modules/*"
@@ -28,7 +29,5 @@
         "utils/*"
       ]
     },
-    "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true
   }
 }
