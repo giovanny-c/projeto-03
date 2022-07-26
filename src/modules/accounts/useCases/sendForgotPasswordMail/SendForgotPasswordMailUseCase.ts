@@ -6,6 +6,7 @@ import { AppError } from "../../../../shared/errors/AppError";
 import { IUsersRepository } from "../../repositories/IUsersRepository"
 import issueJWT from "../../../../utils/tokensUtils/issueJWT";
 import { PRIV_KEY } from "../../../../utils/keyUtils/readKeys";
+import { IEmailRequest } from "@modules/accounts/dtos/IEmaiRequestDTO";
 
 @injectable()
 class SendForgotPasswordMailUseCase {
@@ -18,7 +19,7 @@ class SendForgotPasswordMailUseCase {
 
     ) { }
 
-    async execute(email: string): Promise<void> {
+    async execute({ email }: IEmailRequest): Promise<void> {
 
         const userExists = await this.usersRepository.findByEmail(email)
 
@@ -40,12 +41,12 @@ class SendForgotPasswordMailUseCase {
 
         }
 
-        await this.mailProvider.sendMail(
-            email,
-            "Recuperação de senha",
+        await this.mailProvider.sendMail({
+            to: email,
+            subject: "Recuperação de senha",
             variables,
-            templatePath
-        )
+            path: templatePath
+        })
 
 
 

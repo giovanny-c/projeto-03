@@ -33,7 +33,7 @@ describe("Send a recover password email to retrieve a password of an account", (
             is_confirmed: false
         })
 
-        await sendForgotPasswordMailUseCase.execute(email)
+        await sendForgotPasswordMailUseCase.execute({ email })
 
         expect(sendMail).toHaveBeenCalled()
 
@@ -53,7 +53,7 @@ describe("Send a recover password email to retrieve a password of an account", (
         })
 
         await expect(
-            sendForgotPasswordMailUseCase.execute("wrong@email.com")
+            sendForgotPasswordMailUseCase.execute({ email: "wrong@email.com" })
         ).rejects.toEqual(new AppError("Invalid Email, try again", 418))
 
     })

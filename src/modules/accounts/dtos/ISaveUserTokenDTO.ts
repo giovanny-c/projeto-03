@@ -1,6 +1,6 @@
 
 
-interface ICreateUserTokenDTO {
+interface ISaveUserTokenDTO {
 
 
     user_id: string
@@ -13,4 +13,4 @@ interface ICreateUserTokenDTO {
 
 }
 
-export { ICreateUserTokenDTO }
+export { ISaveUserTokenDTO }

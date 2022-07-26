@@ -1,7 +1,7 @@
 import exp from "constants";
 import { Repository } from "typeorm";
 import { dataSource } from "../../../../database";
-import { ICreateUserDTO } from "../../dtos/ICreateUserDTO";
+import { ISaveUserDTO } from "../../dtos/ISaveUserDTO";
 import { User } from "../../entities/User";
 import { IUsersRepository } from "../IUsersRepository";
 
@@ -17,7 +17,7 @@ class UsersRepository implements IUsersRepository {
 
 
     //voltar a criar id pelo app
-    async save({ id, name, email, password_hash, salt, is_confirmed }: ICreateUserDTO): Promise<User> {
+    async save({ id, name, email, password_hash, salt, is_confirmed }: ISaveUserDTO): Promise<User> {
 
         const user = this.repository.create({
             id,

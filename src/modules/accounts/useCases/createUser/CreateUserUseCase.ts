@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import { ICreateUserDTO } from "../../dtos/ICreateUserDTO";
+import { ISaveUserDTO } from "../../dtos/ISaveUserDTO";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
 import { AppError } from "../../../../shared/errors/AppError";
 import { genPassword } from "../../../../utils/passwordUtils/passwordUtils"
@@ -17,7 +17,7 @@ class CreateUserUseCase {
     }
 
 
-    async execute({ name, email, password, is_confirmed = false }: ICreateUserDTO): Promise<void> {
+    async execute({ name, email, password, is_confirmed = false }: ISaveUserDTO): Promise<void> {
         //pegar os dados por form no front (multer e erc)
         //hash de senha 
         try {

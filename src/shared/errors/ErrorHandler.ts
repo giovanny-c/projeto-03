@@ -26,7 +26,7 @@ export function errorHandler(err: Error, req: Request, res: Response, next: Next
         return res.status(401).send({ message: err.message })
     }
 
-    if (err instanceof AxiosError) { //se for outro erro relacionado ao token
+    if (err instanceof AxiosError) {
 
         if (err.response) {
 
@@ -40,6 +40,6 @@ export function errorHandler(err: Error, req: Request, res: Response, next: Next
     return res.status(500).json({
 
         status: "error",
-        message: `Internal server error - ${err.message}`
+        message: `Internal server error - ${err}`
     })
 }

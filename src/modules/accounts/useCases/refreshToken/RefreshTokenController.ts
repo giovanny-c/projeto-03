@@ -11,7 +11,7 @@ class RefreshTokenController {
 
         const refreshToken = container.resolve(RefreshTokenUseCase)
 
-        const result = await refreshToken.execute(token)
+        const result = await refreshToken.execute({ token })
 
         return res.json(result)
     }

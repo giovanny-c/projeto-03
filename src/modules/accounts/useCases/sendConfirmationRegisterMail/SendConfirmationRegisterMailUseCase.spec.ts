@@ -33,7 +33,7 @@ describe("Send a confirmation email to confirm the register of a new account", (
             is_confirmed: false
         })
 
-        await sendConfirmationRegisterMailUseCase.execute(email)
+        await sendConfirmationRegisterMailUseCase.execute({ email })
 
         expect(sendMail).toHaveBeenCalled()
 
@@ -53,7 +53,7 @@ describe("Send a confirmation email to confirm the register of a new account", (
         })
 
         await expect(
-            sendConfirmationRegisterMailUseCase.execute("wrong@email.com")
+            sendConfirmationRegisterMailUseCase.execute({ email: "wrong@email.com" })
         ).rejects.toEqual(new AppError("User not found", 500))
 
     })

@@ -36,7 +36,7 @@ describe("Receive a token, and if it is valid, change the confirmation status of
         const newPass = "1234"
 
 
-        await expect(retrievePasswordUseCase.execute(newPass, newPass, token)).resolves.toBe(undefined)
+        await expect(retrievePasswordUseCase.execute({ password: newPass, confirmPassword: newPass, token })).resolves.toBe(undefined)
 
         const compareUser = await usersRepository.findById(user.id as string)
 
@@ -63,7 +63,7 @@ describe("Receive a token, and if it is valid, change the confirmation status of
         const newPass = "1234"
 
 
-        await expect(retrievePasswordUseCase.execute(newPass, "4321", token)).rejects.toEqual(new AppError("Password and confirm password fields do not match", 400))
+        await expect(retrievePasswordUseCase.execute({ password: newPass, confirmPassword: "4321", token })).rejects.toEqual(new AppError("Password and confirm password fields do not match", 400))
 
 
 
@@ -83,7 +83,7 @@ describe("Receive a token, and if it is valid, change the confirmation status of
 
             const newPass = "1234"
 
-            await expect(retrievePasswordUseCase.execute(newPass, newPass, token)).rejects.toThrowError(TokenExpiredError)
+            await expect(retrievePasswordUseCase.execute({ password: newPass, confirmPassword: newPass, token })).rejects.toThrowError(TokenExpiredError)
 
 
 
@@ -104,7 +104,7 @@ describe("Receive a token, and if it is valid, change the confirmation status of
 
         const invalidToken = "eyqa4f45grgre.3f33dj3jf8hf3d.f3f934f3fm3f"
 
-        await expect(retrievePasswordUseCase.execute(newPass, newPass, invalidToken)).rejects.toThrowError(JsonWebTokenError)
+        await expect(retrievePasswordUseCase.execute({ password: newPass, confirmPassword: newPass, token: invalidToken })).rejects.toThrowError(JsonWebTokenError)
 
     })
 

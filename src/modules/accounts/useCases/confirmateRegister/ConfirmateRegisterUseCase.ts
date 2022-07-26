@@ -5,6 +5,7 @@ import { inject, injectable } from "tsyringe";
 
 import { PUB_KEY } from "../../../../utils/keyUtils/readKeys";
 import { IUsersRepository } from "../../repositories/IUsersRepository"
+import { IConfirmateRegisterRequest } from "./IConfirmateRegisterDTO";
 
 
 
@@ -19,7 +20,7 @@ class ConfirmateRegisterUseCase {
 
     }
 
-    async execute(confirmationToken: string): Promise<void> {
+    async execute({ confirmationToken }: IConfirmateRegisterRequest): Promise<void> {
 
         try {
 
@@ -32,6 +33,7 @@ class ConfirmateRegisterUseCase {
             await this.usersRepository.save(user)//update no is_confirmed
 
         } catch (err) {
+
             if (err instanceof TokenExpiredError) {
                 err.message = "Token expired"
                 //deletar conta do bd?
@@ -42,6 +44,8 @@ class ConfirmateRegisterUseCase {
 
                 throw err
             }
+
+            throw err
         }
 
 

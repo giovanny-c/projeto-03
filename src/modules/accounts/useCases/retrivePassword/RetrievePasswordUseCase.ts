@@ -5,6 +5,7 @@ import { AppError } from "../../../../shared/errors/AppError";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
 import { JsonWebTokenError, JwtPayload, TokenExpiredError, verify } from "jsonwebtoken";
 import { PUB_KEY } from "../../../../utils/keyUtils/readKeys";
+import { IRetrievePasswordRequest } from "./IRetrievePasswordDTO";
 
 @injectable()
 class RetrievePasswordUseCase {
@@ -16,7 +17,7 @@ class RetrievePasswordUseCase {
 
     ) { }
 
-    async execute(password: string, confirmPassword: string, token: string): Promise<void> {
+    async execute({ password, confirmPassword, token }: IRetrievePasswordRequest): Promise<void> {
 
         if (password !== confirmPassword) {
             throw new AppError("Password and confirm password fields do not match", 400)

@@ -14,7 +14,7 @@ class RetrievePasswordController {
 
         const retrievePasswordUseCase = container.resolve(RetrievePasswordUseCase)
 
-        await retrievePasswordUseCase.execute(password, confirmPassword, token as string)
+        await retrievePasswordUseCase.execute({ password, confirmPassword, token: token as string })
 
         return res.status(200).send()
     }

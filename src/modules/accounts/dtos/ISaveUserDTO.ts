@@ -1,5 +1,5 @@
 
-interface ICreateUserDTO {
+interface ISaveUserDTO {
 
     id?: string
 
@@ -18,4 +18,4 @@ interface ICreateUserDTO {
     is_logged?: boolean
 }
 
-export { ICreateUserDTO }
+export { ISaveUserDTO }

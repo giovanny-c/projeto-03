@@ -12,7 +12,7 @@ class LogOutController {
 
         const logOut = container.resolve(LogOutUseCase)
 
-        await logOut.execute(id)
+        await logOut.execute({ user_id: id })
 
         return res.status(200).send()
         // return res.redirect("/accounts/login")

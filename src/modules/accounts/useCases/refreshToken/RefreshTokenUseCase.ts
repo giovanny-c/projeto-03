@@ -8,12 +8,10 @@ import { AppError } from "../../../../shared/errors/AppError";
 import { v4 as uuidV4 } from "uuid"
 import issueJWT from "../../../../utils/tokensUtils/issueJWT";
 import { PRIV_KEY } from "../../../../utils/keyUtils/readKeys";
+import { ITokensResponse } from "@modules/accounts/dtos/ITokensResponseDTO";
+import { IRefreshTokenRequest } from "./IRefreshTokenDTO";
 
-interface IResponse {
-    token: string
-    refresh_token: string
-    // expires_date: Date
-}
+
 
 @injectable()
 class RefreshTokenUseCase {
@@ -29,7 +27,7 @@ class RefreshTokenUseCase {
 
     }
 
-    async execute(refresh_token: string): Promise<IResponse> {
+    async execute({ refresh_token }: IRefreshTokenRequest): Promise<ITokensResponse> {
 
 
         const refreshToken = await this.usersTokensRepository.findByRefreshToken(refresh_token)

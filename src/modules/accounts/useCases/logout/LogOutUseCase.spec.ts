@@ -42,7 +42,7 @@ describe("Mark a user as logged out and revoke its tokens", () => {
 
 
         expect(
-            await logOutUseCase.execute(user_id)
+            await logOutUseCase.execute({ user_id })
         ).toHaveReturned
 
     })
@@ -70,7 +70,7 @@ describe("Mark a user as logged out and revoke its tokens", () => {
 
 
         await expect(
-            logOutUseCase.execute("3ze23z2d32d2f")
+            logOutUseCase.execute({ user_id: "3ze23z2d32d2f" })
         ).rejects.toEqual(new AppError("User not found", 400))
     })
 

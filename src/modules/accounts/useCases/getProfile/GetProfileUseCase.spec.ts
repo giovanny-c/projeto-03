@@ -24,7 +24,7 @@ describe("Get the profile of a user, with its id", () => {
             is_confirmed: true
         })
 
-        const userProfile = await getProfileUseCase.execute("543234321266875")
+        const userProfile = await getProfileUseCase.execute({ id: "543234321266875" })
 
 
         expect(userProfile).toHaveProperty("name")
@@ -45,7 +45,7 @@ describe("Get the profile of a user, with its id", () => {
         })
 
         await expect(
-            getProfileUseCase.execute("")
+            getProfileUseCase.execute({ id: "" })
         ).rejects.toEqual(new AppError("Id missing", 400))
 
 
@@ -63,7 +63,7 @@ describe("Get the profile of a user, with its id", () => {
         })
 
         await expect(
-            getProfileUseCase.execute("4534534534762121")
+            getProfileUseCase.execute({ id: "4534534534762121" })
         ).rejects.toEqual(new AppError("User not found", 400))
 
 

@@ -1,4 +1,4 @@
-import { ICreateUserDTO } from "../../dtos/ICreateUserDTO";
+import { ISaveUserDTO } from "../../dtos/ISaveUserDTO";
 import { User } from "../../entities/User";
 import { IUsersRepository } from "../IUsersRepository";
 import { v4 as uuidV4 } from "uuid"
@@ -7,7 +7,7 @@ class UsersRepositoryInMemory implements IUsersRepository {
 
     users: User[] = []//inicializa o array
 
-    async save({ id = uuidV4(), password_hash, name, email, salt, is_confirmed = false }: ICreateUserDTO): Promise<User> {
+    async save({ id = uuidV4(), password_hash, name, email, salt, is_confirmed = false }: ISaveUserDTO): Promise<User> {
         let user
 
         user = new User()

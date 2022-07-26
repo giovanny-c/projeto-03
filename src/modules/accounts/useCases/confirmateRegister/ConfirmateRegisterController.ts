@@ -8,15 +8,21 @@ class ConfirmateRegisterController {
 
     async handle(req: Request, res: Response): Promise<Response> {
 
-        const token = req.query.token
+        try {
 
-        const confirmateRegister = container.resolve(ConfirmateRegisterUseCase)
 
-        await confirmateRegister.execute(token as string)
+            const token = req.query.token
 
-        return res.status(200).send()
-        //redirect to login
+            const confirmateRegister = container.resolve(ConfirmateRegisterUseCase)
 
+            await confirmateRegister.execute({ confirmationToken: token as string })
+
+            return res.status(200).send()
+            //redirect to login
+
+        } catch (error) {
+            throw error
+        }
 
     }
 

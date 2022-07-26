@@ -1,6 +1,6 @@
 import { Repository } from "typeorm";
 import { dataSource } from "../../../../database";
-import { ICreateUserTokenDTO } from "../../dtos/ICreateUserTokenDTO";
+import { ISaveUserTokenDTO } from "../../dtos/ISaveUserTokenDTO";
 import { ISetTokenFamilyInvalidDTO } from "../../dtos/ISetTokenFamilyInvalidDTO";
 import { UsersTokens } from "../../entities/UsersTokens";
 import { IUsersTokensRepository } from "../IUsersTokensRepository";
@@ -14,7 +14,7 @@ class UsersTokensRepository implements IUsersTokensRepository {
     }
 
 
-    async save({ expires_date, token, user_id, is_valid, was_used, token_family }: ICreateUserTokenDTO): Promise<UsersTokens> {
+    async save({ expires_date, token, user_id, is_valid, was_used, token_family }: ISaveUserTokenDTO): Promise<UsersTokens> {
         const userToken = this.repository.create({
             expires_date,
             token,
@@ -28,7 +28,7 @@ class UsersTokensRepository implements IUsersTokensRepository {
 
         return userToken
     }
-    async findByUserIdAndRefreshToken({ user_id, token }: ICreateUserTokenDTO): Promise<UsersTokens> {
+    async findByUserIdAndRefreshToken({ user_id, token }: ISaveUserTokenDTO): Promise<UsersTokens> {
 
         const userToken = await this.repository.findOne({
             where: { user_id, token }

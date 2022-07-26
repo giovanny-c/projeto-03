@@ -1,5 +1,5 @@
 
-import { ICreateUserTokenDTO } from "../../dtos/ICreateUserTokenDTO";
+import { ISaveUserTokenDTO } from "../../dtos/ISaveUserTokenDTO";
 import { ISetTokenFamilyInvalidDTO } from "../../dtos/ISetTokenFamilyInvalidDTO";
 import { UsersTokens } from "../../entities/UsersTokens";
 import { IUsersTokensRepository } from "../IUsersTokensRepository";
@@ -9,7 +9,7 @@ class UsersTokensRepositoryInMemory implements IUsersTokensRepository {
 
     usersTokens: UsersTokens[] = []
 
-    async save({ user_id, expires_date, token, token_family, is_valid = true, was_used = false }: ICreateUserTokenDTO): Promise<UsersTokens> {
+    async save({ user_id, expires_date, token, token_family, is_valid = true, was_used = false }: ISaveUserTokenDTO): Promise<UsersTokens> {
 
         const userToken = new UsersTokens()
 
@@ -27,7 +27,7 @@ class UsersTokensRepositoryInMemory implements IUsersTokensRepository {
         return userToken
 
     }
-    async findByUserIdAndRefreshToken({ user_id, token }: ICreateUserTokenDTO): Promise<UsersTokens> {
+    async findByUserIdAndRefreshToken({ user_id, token }: ISaveUserTokenDTO): Promise<UsersTokens> {
         const userToken = this.usersTokens.find(ut => ut.user_id === user_id && ut.token === token) as UsersTokens
 
         return userToken

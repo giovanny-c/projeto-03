@@ -12,7 +12,7 @@ class SendForgotPasswordMailController {
 
         const sendForgotPasswordMail = container.resolve(SendForgotPasswordMailUseCase)
 
-        await sendForgotPasswordMail.execute(email)
+        await sendForgotPasswordMail.execute({ email })
 
         return res.status(200).send("A reset password email was sent to you, please verify your inbox")
 

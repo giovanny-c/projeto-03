@@ -8,19 +8,13 @@ import { AppError } from "../../../../shared/errors/AppError";
 import { validatePassword } from "../../../../utils/passwordUtils/passwordUtils";
 import issueJWT from "../../../../utils/tokensUtils/issueJWT";
 import { PRIV_KEY } from "../../../../utils/keyUtils/readKeys";
+import { ITokensResponse } from "@modules/accounts/dtos/ITokensResponseDTO";
+import { IAuthenticateUserRequest } from "./AuthenticateUserDTO";
 
 
 
 
-interface IResponse {
-    user: {
-        email: string
-    }
-    token: string
-    refresh_token: string
-    // expires_date: Date
 
-}
 
 @injectable()
 class AuthenticateUserUseCase {
@@ -36,7 +30,7 @@ class AuthenticateUserUseCase {
 
     }
 
-    async execute(email: string, password: string): Promise<IResponse> {
+    async execute({ email, password }: IAuthenticateUserRequest): Promise<ITokensResponse> {
         try {
 
             const user = await this.usersRepository.findByEmail(email)
@@ -49,7 +43,6 @@ class AuthenticateUserUseCase {
             if (!user.is_confirmed) {
                 throw new AppError("You need to confirm your account before you loggin for the first time. Please check your email for the confirmation register email", 400)
             }
-
 
             //const passwordMatch = await compare(password, user.password)
 
@@ -91,18 +84,16 @@ class AuthenticateUserUseCase {
 
 
 
-            const tokenReturn: IResponse = {
-
+            return {
                 user: {
                     email
                 },
                 token: `Bearer ${token}`,
                 //  expires_date: token_expires_date,
                 refresh_token
-
             }
 
-            return tokenReturn
+
 
         } catch (error) {
             throw error

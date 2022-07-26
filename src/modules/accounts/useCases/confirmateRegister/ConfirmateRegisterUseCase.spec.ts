@@ -26,9 +26,9 @@ describe("Receive a token, and if it is valid, change the confirmation status of
             is_confirmed: false
         })
 
-        const token = issueJWT({ subject: user.id, key: PRIV_KEY, expiresIn: process.env.EXPIRES_IN_CONFIRAMTION_TOKEN as string })
+        const confirmationToken = issueJWT({ subject: user.id, key: PRIV_KEY, expiresIn: process.env.EXPIRES_IN_CONFIRAMTION_TOKEN as string })
 
-        await confirmateRegisterUseCase.execute(token)
+        await confirmateRegisterUseCase.execute({ confirmationToken })
 
         const expUser = await usersRepository.findById(user.id as string)
 
@@ -45,12 +45,12 @@ describe("Receive a token, and if it is valid, change the confirmation status of
             is_confirmed: false
         })
 
-        const token = issueJWT({ subject: user.id, key: PRIV_KEY, expiresIn: "0s" })
+        const confirmationToken = issueJWT({ subject: user.id, key: PRIV_KEY, expiresIn: "0s" })
 
 
         await expect(
 
-            confirmateRegisterUseCase.execute(token)
+            confirmateRegisterUseCase.execute({ confirmationToken })
         ).rejects.toThrowError(TokenExpiredError)
 
 
@@ -65,12 +65,12 @@ describe("Receive a token, and if it is valid, change the confirmation status of
             is_confirmed: false
         })
 
-        const token = issueJWT({ subject: user.id, key: PRIV_KEY, expiresIn: "10m" })
+        const confirmationToken = issueJWT({ subject: user.id, key: PRIV_KEY, expiresIn: "10m" })
 
 
         await expect(
 
-            confirmateRegisterUseCase.execute("eyfw232d323.3d23d23dshhedfref.45cv45fg45f4c345f34f34")
+            confirmateRegisterUseCase.execute({ confirmationToken: "eyfw232d323.3d23d23dshhedfref.45cv45fg45f4c345f34f34" })
         ).rejects.toThrowError(JsonWebTokenError)
 
 

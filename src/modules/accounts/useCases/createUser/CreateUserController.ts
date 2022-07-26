@@ -8,20 +8,24 @@ import { SendConfirmationRegisterMailUseCase } from "../sendConfirmationRegister
 class CreateUserController {
 
     async handle(req: Request, res: Response): Promise<Response> {
+        try {
+            const { name, email, password } = req.body
 
-        const { name, email, password } = req.body
+            const createUser = container.resolve(CreateUserUseCase)
 
-        const createUser = container.resolve(CreateUserUseCase)
-
-        const sendConfirmationRegisterMail = container.resolve(SendConfirmationRegisterMailUseCase)
-
-
-        await createUser.execute({ name, email, password })
-
-        await sendConfirmationRegisterMail.execute(email)
+            const sendConfirmationRegisterMail = container.resolve(SendConfirmationRegisterMailUseCase)
 
 
-        return res.status(200).json("A confirmation email was sent to the email provided. Please verify your inbox to confirm your sign-in")
+            await createUser.execute({ name, email, password })
+
+            await sendConfirmationRegisterMail.execute(email)
+
+
+            return res.status(200).json("A confirmation email was sent to the email provided. Please verify your inbox to confirm your sign-in")
+
+        } catch (error) {
+            throw error
+        }
     }
 
 

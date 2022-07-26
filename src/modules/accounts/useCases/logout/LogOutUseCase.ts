@@ -2,6 +2,7 @@ import { AppError } from "@shared/errors/AppError";
 import { inject, injectable } from "tsyringe";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
 import { IUsersTokensRepository } from "../../repositories/IUsersTokensRepository";
+import { ILogOutRequest } from "./ILogOutDTO";
 
 
 
@@ -18,7 +19,7 @@ class LogOutUseCase {
 
     }
 
-    async execute(user_id: string): Promise<void> {
+    async execute({ user_id }: ILogOutRequest): Promise<void> {
         try {
 
             const user = await this.usersRepository.findById(user_id)

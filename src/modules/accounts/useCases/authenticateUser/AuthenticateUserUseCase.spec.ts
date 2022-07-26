@@ -1,6 +1,6 @@
 
 import { DayjsDateProvider } from "@shared/container/providers/dateProvider/implementations/DayjsDateProvider";
-import { ICreateUserDTO } from "@modules/accounts/dtos/ICreateUserDTO";
+import { ISaveUserDTO } from "@modules/accounts/dtos/ISaveUserDTO";
 import { UsersRepositoryInMemory } from "@modules/accounts/repositories/In-memory/UsersRepositoryInMemory";
 import { UsersTokensRepositoryInMemory } from "@modules/accounts/repositories/In-memory/UsersTokensRepositoryInMemory";
 import { CreateUserUseCase } from "@modules/accounts/useCases/createUser/CreateUserUseCase";
@@ -27,7 +27,7 @@ describe("Authenticate a User", () => {
     it("Should be able to authenticate an user", async () => {
 
 
-        const user: ICreateUserDTO = {
+        const user: ISaveUserDTO = {
             //id: uuidV4(), already gen in the repo
             name: "test name",
             email: "test@test.com",
@@ -37,10 +37,10 @@ describe("Authenticate a User", () => {
 
         await createUserUseCase.execute(user)
 
-        const result = await authenticateUserUseCase.execute(
-            user.email as string,
-            user.password as string
-        )
+        const result = await authenticateUserUseCase.execute({
+            email: user.email as string,
+            password: user.password as string
+        })
 
         expect(result).toHaveProperty("token")
         expect(result).toHaveProperty("refresh_token")
@@ -48,16 +48,16 @@ describe("Authenticate a User", () => {
 
     it("Should not be able to authenticate a non-existent user", async () => {
         await expect(
-            authenticateUserUseCase.execute(
-                "false@email.com",
-                "1234"
-            )
+            authenticateUserUseCase.execute({
+                email: "false@email.com",
+                password: "1234"
+            })
         ).rejects.toEqual(new AppError("email or password incorrect"))
     })
 
     it("Should not be able to authenticate a user with a incorrect password", async () => {
 
-        const user: ICreateUserDTO = {
+        const user: ISaveUserDTO = {
 
             name: "test name",
             email: "test@test.com",
@@ -69,10 +69,10 @@ describe("Authenticate a User", () => {
 
         await expect(
 
-            authenticateUserUseCase.execute(
-                user.email as string,
-                "4321"
-            )
+            authenticateUserUseCase.execute({
+                email: user.email as string,
+                password: "4321"
+            })
         ).rejects.toEqual(new AppError("email or password incorrect"))
 
     })
