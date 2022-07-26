@@ -32,14 +32,14 @@ const generatePdfController = new GeneratePdfController()
 
 accountRoutes.post("/sign-in", upload.none(), createUserController.handle)
 accountRoutes.get("/sign-in", signInController.handle)
-accountRoutes.post("/confirmation", confirmateRegisterController.handle)
+accountRoutes.patch("/confirmation", confirmateRegisterController.handle)
 //se der problema com sendMail pode ser por causa do // baseUrl: (no tsconfig)
-accountRoutes.post("/log-in", upload.none(), authenticateUserController.handle)
+accountRoutes.patch("/log-in", upload.none(), authenticateUserController.handle)
 accountRoutes.post("/refresh-token", upload.none(), refreshTokenController.handle)
 accountRoutes.get("/profile", ensureAuthenticated, getProfileController.handle)
-accountRoutes.post("/log-out", ensureAuthenticated, logOutController.handle)
+accountRoutes.patch("/log-out", ensureAuthenticated, logOutController.handle)
 accountRoutes.post("/forgot-password", upload.none(), sendForgotPasswordMailController.handle)
-accountRoutes.post("/retrieve-password", upload.none(), retrievePasswordController.handle)
+accountRoutes.put("/retrieve-password", upload.none(), retrievePasswordController.handle)
 accountRoutes.post("/gen-pdf", ensureAuthenticated, upload.none(), generatePdfController.handle)
 
 

@@ -1,39 +1,29 @@
-import { NextFunction, Request, response, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { JsonWebTokenError, JwtPayload, TokenExpiredError, verify } from "jsonwebtoken";
 import { AppError } from "../errors/AppError";
 import { PUB_KEY } from "../../utils/keyUtils/readKeys";
 import axios from "axios";
+import { ITokensResponse } from "@modules/accounts/dtos/ITokensResponseDTO";
 
 
-interface IRefreshTokenResponse {
-    token: string
-    refresh_token: string
-}
 
-// interface IJwtPayload {
-//     payload: string
-//     iat: number
-//     exp: number,
-//     sub: string,
-//     jwt: string
-// }
 export async function ensureAuthenticated(req: Request, res: Response, next: NextFunction) {
 
 
     const bearerToken = req.headers.authorization
     const refresh_token = req.headers["refresh_token"]
 
-    let refreshTokenResponse: IRefreshTokenResponse
-
-
     if (!bearerToken || !refresh_token) {
         throw new AppError("Token missing", 400)
     }
 
-    let [, token] = bearerToken.split(" ") //separa as partes do token
-
 
     try {
+
+        let [, token] = bearerToken.split(" ") //separa as partes do token
+
+
+
         const { sub: user_id } = verify(token, PUB_KEY, { algorithms: ["RS256"] }) as JwtPayload
 
         req.user = {//nao seta se o token expirar
@@ -54,13 +44,13 @@ export async function ensureAuthenticated(req: Request, res: Response, next: Nex
                     headers: {
                         ["refresh_token"]: refresh_token as string
                     },
+
                 })
 
 
-                refreshTokenResponse = data
-                console.log(refreshTokenResponse) //para pegar o token e rf manualmente, excluir depois de fazer o front
-
-                let [, token] = refreshTokenResponse.token.split(" ")
+                //para pegar o token e rf manualmente, excluir depois de fazer o front
+                console.log(data)
+                let [, token] = data.token.split(" ")
 
 
                 // ??? fazer outro verify para o token novo ou passar o id do user 
@@ -88,6 +78,8 @@ export async function ensureAuthenticated(req: Request, res: Response, next: Nex
             err.message = "invalid token. Please Log-in to authenticate"
             throw err
         }
+
+
 
     }
 

@@ -9,9 +9,12 @@ export function inspect() {
         const originalMethod = descriptor.value
 
         descriptor.value = async function (...args: any[]) {
-
             console.log(`--- Método ${propertyKey}`)
-            console.log(`------- Parâmetros: ${args}`)
+
+            args.forEach(value => {
+
+                console.log(`------- Parâmetros: ${Object.keys(value)}: ${Object.values(value)}`)
+            });
 
             const functionReturn = await originalMethod.apply(this, args)
 

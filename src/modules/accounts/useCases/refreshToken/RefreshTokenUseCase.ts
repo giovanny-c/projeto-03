@@ -9,7 +9,8 @@ import { v4 as uuidV4 } from "uuid"
 import issueJWT from "../../../../utils/tokensUtils/issueJWT";
 import { PRIV_KEY } from "../../../../utils/keyUtils/readKeys";
 import { ITokensResponse } from "@modules/accounts/dtos/ITokensResponseDTO";
-import { IRefreshTokenRequest } from "./IRefreshTokenDTO";
+import { ITokenRequest } from "@modules/accounts/dtos/ITokensRequestDTO";
+
 
 
 
@@ -27,7 +28,7 @@ class RefreshTokenUseCase {
 
     }
 
-    async execute({ refresh_token }: IRefreshTokenRequest): Promise<ITokensResponse> {
+    async execute({ token: refresh_token }: ITokenRequest): Promise<ITokensResponse> {
 
 
         const refreshToken = await this.usersTokensRepository.findByRefreshToken(refresh_token)
