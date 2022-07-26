@@ -9,7 +9,7 @@ class UsersTokensRepositoryInMemory implements IUsersTokensRepository {
 
     usersTokens: UsersTokens[] = []
 
-    async create({ user_id, expires_date, token, token_family, is_valid = true, was_used = false }: ICreateUserTokenDTO): Promise<UsersTokens> {
+    async save({ user_id, expires_date, token, token_family, is_valid = true, was_used = false }: ICreateUserTokenDTO): Promise<UsersTokens> {
 
         const userToken = new UsersTokens()
 

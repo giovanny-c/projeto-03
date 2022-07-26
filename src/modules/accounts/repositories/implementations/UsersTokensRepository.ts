@@ -14,7 +14,7 @@ class UsersTokensRepository implements IUsersTokensRepository {
     }
 
 
-    async create({ expires_date, token, user_id, is_valid, was_used, token_family }: ICreateUserTokenDTO): Promise<UsersTokens> {
+    async save({ expires_date, token, user_id, is_valid, was_used, token_family }: ICreateUserTokenDTO): Promise<UsersTokens> {
         const userToken = this.repository.create({
             expires_date,
             token,

@@ -39,12 +39,12 @@ class SendConfirmationRegisterMailUseCase {
                 link: `${process.env.CONFIRMATION_MAIL_URL}${token}`
             }
 
-            await this.mailProvider.sendMail(
-                user.email,
-                "Confirmação de cadastro",
+            await this.mailProvider.sendMail({
+                to: user.email,
+                subject: "Confirmação de cadastro",
                 variables,
-                templatePath
-            )
+                path: templatePath
+            })
 
         } catch (error) {
             throw error

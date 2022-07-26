@@ -96,7 +96,7 @@ class RefreshTokenUseCase {
 
 
         //e cria outro rf token da mesma familia no bd
-        const newRefreshToken = await this.usersTokensRepository.create({
+        const newRefreshToken = await this.usersTokensRepository.save({
             token: newRefresh_token,
             expires_date: refresh_token_expires_date,
             user_id: user_id as string,

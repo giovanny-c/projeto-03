@@ -30,7 +30,7 @@ class RetrievePasswordUseCase {
 
             const { salt, hash } = genPassword(password)
 
-            await this.userRepository.create({
+            await this.userRepository.save({
                 id: user_id as string,
                 password_hash: hash,
                 salt

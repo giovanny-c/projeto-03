@@ -25,7 +25,7 @@ describe("Send a recover password email to retrieve a password of an account", (
 
 
         const email = "test@email.com"
-        await usersRepositoryInMemory.create({
+        await usersRepositoryInMemory.save({
             name: "test",
             email: email,
             password_hash: "dq2d23dj2d3j2",
@@ -44,7 +44,7 @@ describe("Send a recover password email to retrieve a password of an account", (
 
 
         const email = "test@email.com"
-        await usersRepositoryInMemory.create({
+        await usersRepositoryInMemory.save({
             name: "test",
             email: email,
             password_hash: "dq2d23dj2d3j2",

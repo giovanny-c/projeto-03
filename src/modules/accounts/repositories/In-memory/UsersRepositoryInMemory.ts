@@ -7,7 +7,7 @@ class UsersRepositoryInMemory implements IUsersRepository {
 
     users: User[] = []//inicializa o array
 
-    async create({ id = uuidV4(), password_hash, name, email, salt, is_confirmed = false }: ICreateUserDTO): Promise<User> {
+    async save({ id = uuidV4(), password_hash, name, email, salt, is_confirmed = false }: ICreateUserDTO): Promise<User> {
         let user
 
         user = new User()

@@ -21,7 +21,7 @@ describe("Mark a user as logged out and revoke its tokens", () => {
     it("Shoul be able to mark a user as logged out and revoke its tokens ", async () => {
 
         const user_id = "21352765328787"
-        await usersRepositoryInMemory.create({
+        await usersRepositoryInMemory.save({
             id: user_id,
             name: "test",
             email: "test@email.com",
@@ -30,7 +30,7 @@ describe("Mark a user as logged out and revoke its tokens", () => {
             is_confirmed: true
         })
 
-        await usersTokensRepositoryInMemory.create({
+        await usersTokensRepositoryInMemory.save({
             token: "3fd43iff34f93f",
             token_family: "d23d293dk23kd2",
             user_id: user_id,
@@ -49,7 +49,7 @@ describe("Mark a user as logged out and revoke its tokens", () => {
 
     it("Should not be able to mark a unexisting user as logged out", async () => {
         const user_id = "21352765328787"
-        await usersRepositoryInMemory.create({
+        await usersRepositoryInMemory.save({
             id: user_id,
             name: "test",
             email: "test@email.com",
@@ -58,7 +58,7 @@ describe("Mark a user as logged out and revoke its tokens", () => {
             is_confirmed: true
         })
 
-        await usersTokensRepositoryInMemory.create({
+        await usersTokensRepositoryInMemory.save({
             token: "3fd43iff34f93f",
             token_family: "d23d293dk23kd2",
             user_id: user_id,

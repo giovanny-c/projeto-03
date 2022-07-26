@@ -36,7 +36,7 @@ class CreateUserUseCase {
 
             //const passwordHash = await hash(password as string, 8)
 
-            await this.usersRepository.create({ name, email, password_hash: hash, salt, is_confirmed })
+            await this.usersRepository.save({ name, email, password_hash: hash, salt, is_confirmed })
 
         } catch (error) {
             // throw new AppError("There was not possible to create a user, please try again. If the error persists contact the suport", 500)

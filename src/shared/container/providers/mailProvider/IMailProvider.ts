@@ -1,7 +1,16 @@
+
+
+interface IMail {
+    to: string
+    subject: any
+    variables: any
+    path: string
+}
+
 interface IMailProvider {
 
-    sendMail(to: string, subject, variables: any, path: string): Promise<void>
+    sendMail({ to, subject, variables, path }: IMail): Promise<void>
 
 }
 
-export { IMailProvider }
+export { IMailProvider, IMail }

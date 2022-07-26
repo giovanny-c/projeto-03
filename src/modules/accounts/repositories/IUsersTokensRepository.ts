@@ -5,7 +5,7 @@ import { UsersTokens } from "../entities/UsersTokens"
 
 interface IUsersTokensRepository {
 
-    create(data: ICreateUserTokenDTO): Promise<UsersTokens>
+    save(data: ICreateUserTokenDTO): Promise<UsersTokens>
     findByUserIdAndRefreshToken({ user_id, token }: ICreateUserTokenDTO): Promise<UsersTokens>
     findByRefreshToken(token: string): Promise<UsersTokens>
     deleteById(id: string): Promise<void>

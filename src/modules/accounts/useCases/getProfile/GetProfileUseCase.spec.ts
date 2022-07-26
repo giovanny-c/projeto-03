@@ -15,7 +15,7 @@ describe("Get the profile of a user, with its id", () => {
 
     it("Should be able to get a user profile", async () => {
 
-        await usersRepositoryInMemory.create({
+        await usersRepositoryInMemory.save({
             id: "543234321266875",
             password_hash: "x7323crrn9832nd2fg4fwegsdh",
             salt: "dsa4f4feferff",
@@ -35,7 +35,7 @@ describe("Get the profile of a user, with its id", () => {
 
     it("Should not able to get a user profile whitout a id", async () => {
 
-        await usersRepositoryInMemory.create({
+        await usersRepositoryInMemory.save({
             id: "543234321266875",
             password_hash: "x7323crrn9832nd2fg4fwegsdh",
             salt: "dsa4f4feferff",
@@ -53,7 +53,7 @@ describe("Get the profile of a user, with its id", () => {
 
     it("Should not be able to get a user profile if a unexisting id is given", async () => {
 
-        await usersRepositoryInMemory.create({
+        await usersRepositoryInMemory.save({
             id: "543234321266875",
             password_hash: "x7323crrn9832nd2fg4fwegsdh",
             salt: "dsa4f4feferff",

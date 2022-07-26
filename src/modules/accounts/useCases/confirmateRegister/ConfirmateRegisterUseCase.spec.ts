@@ -18,7 +18,7 @@ describe("Receive a token, and if it is valid, change the confirmation status of
 
     it("Should validate de received token and change the confirmation status of a account", async () => {
 
-        const user = await usersRepository.create({
+        const user = await usersRepository.save({
             name: "test",
             email: "test@email.com",
             salt: "3d23d23d2d2d",
@@ -37,7 +37,7 @@ describe("Receive a token, and if it is valid, change the confirmation status of
     })
 
     it("Should throw an error if the token received is expired", async () => {
-        const user = await usersRepository.create({
+        const user = await usersRepository.save({
             name: "test",
             email: "test@email.com",
             salt: "3d23d23d2d2d",
@@ -57,7 +57,7 @@ describe("Receive a token, and if it is valid, change the confirmation status of
     })
 
     it("Should throw an error if the token received is invalid", async () => {
-        const user = await usersRepository.create({
+        const user = await usersRepository.save({
             name: "test",
             email: "test@email.com",
             salt: "3d23d23d2d2d",

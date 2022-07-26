@@ -22,7 +22,7 @@ describe("Receive a token, check if it is valid, and generate a new pair of toke
 
     it("Should receive a refresh token and if it is not expired, used or invalid, generate a new pair of tokens, and revoke the refresh-token received", async () => {
 
-        const user = await usersRepositoryInMemory.create({
+        const user = await usersRepositoryInMemory.save({
             name: "test",
             email: "test@email.com",
             password_hash: "asdadsdas",
@@ -31,7 +31,7 @@ describe("Receive a token, check if it is valid, and generate a new pair of toke
         })
 
 
-        const refresh_token = await usersTokensRepositoryInMemory.create({
+        const refresh_token = await usersTokensRepositoryInMemory.save({
             expires_date: dateProvider.addOrSubtractTime("add", "hour", 1),
             user_id: user.id as string,
             token: "21312e32e32d",
@@ -68,7 +68,7 @@ describe("Receive a token, check if it is valid, and generate a new pair of toke
 
     it("Should revoke the received refresh token with a expired date, and revoke all the other tokens of the same family", async () => {
 
-        const user = await usersRepositoryInMemory.create({
+        const user = await usersRepositoryInMemory.save({
             name: "test",
             email: "test@email.com",
             password_hash: "asdadsdas",
@@ -77,7 +77,7 @@ describe("Receive a token, check if it is valid, and generate a new pair of toke
         })
 
 
-        const refresh_token_1 = await usersTokensRepositoryInMemory.create({
+        const refresh_token_1 = await usersTokensRepositoryInMemory.save({
             expires_date: dateProvider.addOrSubtractTime("sub", "hour", 1),
             user_id: user.id as string,
             token: "21312e32e32d",
@@ -86,7 +86,7 @@ describe("Receive a token, check if it is valid, and generate a new pair of toke
             was_used: false,
         })
 
-        const refresh_token_2 = await usersTokensRepositoryInMemory.create({
+        const refresh_token_2 = await usersTokensRepositoryInMemory.save({
             expires_date: dateProvider.addOrSubtractTime("sub", "hour", 1),
             user_id: user.id as string,
             token: "21312e32e32d",
@@ -109,7 +109,7 @@ describe("Receive a token, check if it is valid, and generate a new pair of toke
     })
 
     it("Should revoke the received refresh token with a invalid status, and revoke all the other tokens of the same family", async () => {
-        const user = await usersRepositoryInMemory.create({
+        const user = await usersRepositoryInMemory.save({
             name: "test",
             email: "test@email.com",
             password_hash: "asdadsdas",
@@ -118,7 +118,7 @@ describe("Receive a token, check if it is valid, and generate a new pair of toke
         })
 
 
-        const refresh_token_1 = await usersTokensRepositoryInMemory.create({
+        const refresh_token_1 = await usersTokensRepositoryInMemory.save({
             expires_date: dateProvider.addOrSubtractTime("add", "hour", 1),
             user_id: user.id as string,
             token: "21312e32e32d",
@@ -127,7 +127,7 @@ describe("Receive a token, check if it is valid, and generate a new pair of toke
             was_used: false,
         })
 
-        const refresh_token_2 = await usersTokensRepositoryInMemory.create({
+        const refresh_token_2 = await usersTokensRepositoryInMemory.save({
             expires_date: dateProvider.addOrSubtractTime("add", "hour", 1),
             user_id: user.id as string,
             token: "21312e32edgfgdfg2d",
@@ -150,7 +150,7 @@ describe("Receive a token, check if it is valid, and generate a new pair of toke
 
 
     it("Should revoke the received refresh token that was already used, and revoke all the other tokens of the same family", async () => {
-        const user = await usersRepositoryInMemory.create({
+        const user = await usersRepositoryInMemory.save({
             name: "test",
             email: "test@email.com",
             password_hash: "asdadsdas",
@@ -159,7 +159,7 @@ describe("Receive a token, check if it is valid, and generate a new pair of toke
         })
 
 
-        const refresh_token_1 = await usersTokensRepositoryInMemory.create({
+        const refresh_token_1 = await usersTokensRepositoryInMemory.save({
             expires_date: dateProvider.addOrSubtractTime("add", "hour", 1),
             user_id: user.id as string,
             token: "21312e32e32d",
@@ -168,7 +168,7 @@ describe("Receive a token, check if it is valid, and generate a new pair of toke
             was_used: true,
         })
 
-        const refresh_token_2 = await usersTokensRepositoryInMemory.create({
+        const refresh_token_2 = await usersTokensRepositoryInMemory.save({
             expires_date: dateProvider.addOrSubtractTime("add", "hour", 1),
             user_id: user.id as string,
             token: "21312e3grge32d",
@@ -191,7 +191,7 @@ describe("Receive a token, check if it is valid, and generate a new pair of toke
 
 
     it("Should receive a unexisting refresh token, and throw a error", async () => {
-        const user = await usersRepositoryInMemory.create({
+        const user = await usersRepositoryInMemory.save({
             name: "test",
             email: "test@email.com",
             password_hash: "asdadsdas",
@@ -199,7 +199,7 @@ describe("Receive a token, check if it is valid, and generate a new pair of toke
             is_confirmed: true
         })
 
-        const refresh_token = await usersTokensRepositoryInMemory.create({
+        const refresh_token = await usersTokensRepositoryInMemory.save({
             expires_date: dateProvider.addOrSubtractTime("add", "hour", 1),
             user_id: user.id as string,
             token: "21312e32e32d",
