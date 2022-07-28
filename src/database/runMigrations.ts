@@ -17,4 +17,5 @@ export const dataSourceORM: DataSource = new DataSource({
         "src/database/migrations/*.ts"
     ],
 })
+//yarn typeorm migration:create ./src/database/migrations/migratioName
 dataSourceORM.initialize()

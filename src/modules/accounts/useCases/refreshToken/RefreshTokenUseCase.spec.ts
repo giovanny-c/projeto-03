@@ -41,7 +41,7 @@ describe("Receive a token, check if it is valid, and generate a new pair of toke
         })
 
 
-        const response = await refreshTokenUseCase.execute({ refresh_token: refresh_token.token })
+        const response = await refreshTokenUseCase.execute({ token: refresh_token.token })
 
         //generated token pair
         expect(response).toHaveProperty("token")
@@ -98,7 +98,7 @@ describe("Receive a token, check if it is valid, and generate a new pair of toke
 
         await expect(
 
-            refreshTokenUseCase.execute({ refresh_token: refresh_token_2.token })
+            refreshTokenUseCase.execute({ token: refresh_token_2.token })
 
         ).rejects.toEqual(new AppError("Conection expired (token expired). Please Log-in again. ", 401))
 
@@ -139,7 +139,7 @@ describe("Receive a token, check if it is valid, and generate a new pair of toke
 
         await expect(
 
-            refreshTokenUseCase.execute({ refresh_token: refresh_token_2.token })
+            refreshTokenUseCase.execute({ token: refresh_token_2.token })
 
         ).rejects.toEqual(new AppError("Conection expired (Invalid token). Please Log-in again", 401))
 
@@ -180,7 +180,7 @@ describe("Receive a token, check if it is valid, and generate a new pair of toke
 
         await expect(
 
-            refreshTokenUseCase.execute({ refresh_token: refresh_token_2.token })
+            refreshTokenUseCase.execute({ token: refresh_token_2.token })
 
         ).rejects.toEqual(new AppError("Conection expired (used token). Please Log-in again. ", 401))
 
@@ -212,7 +212,7 @@ describe("Receive a token, check if it is valid, and generate a new pair of toke
 
         await expect(
 
-            refreshTokenUseCase.execute({ refresh_token: invalid_token })
+            refreshTokenUseCase.execute({ token: invalid_token })
 
         ).rejects.toEqual(new AppError("Token missing or invalid token, Please Log-in", 400))
 
