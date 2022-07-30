@@ -1,9 +1,9 @@
-import { User } from "../../../modules/accounts/entities/User";
+import { User } from "../../accounts/entities/User";
 import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, PrimaryColumn } from "typeorm";
 import { v4 as uuidV4 } from "uuid"
 
 @Entity("storage")
-class Storage {
+class _Data {
 
     @PrimaryColumn()
     id: string
@@ -34,4 +34,4 @@ class Storage {
     }
 }
 
-export { Storage }
+export { _Data }
