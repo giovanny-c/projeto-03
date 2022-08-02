@@ -1,5 +1,6 @@
 import { IUsersRepository } from "@modules/accounts/repositories/IUsersRepository";
 import { IDateProvider } from "@shared/container/providers/dateProvider/IDateProvider";
+import { IStorageProvider } from "@shared/container/providers/storageProvider/IStorageProvider";
 import { AppError } from "@shared/errors/AppError";
 import * as fs from "fs"
 import { inject, injectable } from "tsyringe";
@@ -16,7 +17,9 @@ class SaveFileUseCase {
         @inject("DayjsDateProvider")
         private dateProvider: IDateProvider,
         @inject("UsersRepository")
-        private usersRepository: IUsersRepository
+        private usersRepository: IUsersRepository,
+        @inject("StorageProvider")
+        private storageProvider: IStorageProvider
     ) {
 
     }
@@ -24,13 +27,14 @@ class SaveFileUseCase {
     async execute({ id, user_id, name, mime_type }: ISaveFile): Promise<File> {
         try {
 
-            if (id) {
+            const userExists = await this.usersRepository.findById(user_id)
 
-                const userExists = await this.usersRepository.findById(user_id)
+            if (!userExists) {
+                throw new AppError("User not found", 400)
+            }
 
-                if (!userExists) {
-                    throw new AppError("User not found", 400)
-                }
+            //update do arquivo
+            if (id) {// busca o arquivo se existir o id
 
                 const fileExists = await this.fileRepository.findById(id as string)
 
@@ -38,16 +42,24 @@ class SaveFileUseCase {
                     throw new AppError("File not found")
                 }
 
-                if (userExists.id !== fileExists.user_id) {
+                if (userExists.id !== fileExists.user_id /*&& userExists.admin === false*/) {
                     throw new AppError("Error (You can't alter a file from other user)", 400)
                 }
 
-                //sempre antes do save
-                fs.unlinkSync(`/usr/app/tmp/${fileExists.name}`) //remove a img antiga
+                //remove o file antigo do storage
+                await this.storageProvider.delete({ file: fileExists.name, folder: fileExists.mime_type })
 
+                //salva o file novo no storage
+                await this.storageProvider.save({ file: name, folder: mime_type })
+
+                //salva no bd, no lugar do antigo
                 return await this.fileRepository.save({ id, user_id, name, mime_type, updated_at: this.dateProvider.dateNow() })
             }
 
+            //salva no storage
+            await this.storageProvider.save({ file: name, folder: mime_type })
+
+            //salva no bd
             return await this.fileRepository.save({ user_id, name, mime_type, created_at: this.dateProvider.dateNow() })
 
 

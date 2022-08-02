@@ -1,25 +1,49 @@
 import upload from "@config/upload";
 import * as fs from "fs"
 import { resolve } from "path";
-import { IStorageProvider } from "../IStorageProvider";
+import { IFilePath, IStorageProvider } from "../IStorageProvider";
 
 
 class LocalStorageProvider implements IStorageProvider {
 
-    async save(file: string, folder: string): Promise<string> {
+    async save({ file, folder }: IFilePath): Promise<string> {
 
-        let [fldr, subfolder] = folder.split("/", 2)
-        let [, file_type] = file.split(".", 2)
+        let [fldr,] = folder.split("/", 2)// pega a primeira parte do split se houver
 
-        await fs.promises.rename( //poe o file outro lugar
+        let [, file_type] = file.split(/\.(?!.*\.)/, 2) // separa no ultimo ponto para pegar o tipo do arquivo
+
+        let dir = `${upload.tmpFolder}/${fldr}/${file_type}`
+        //ex: tmp/image/jpg
+
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true })
+        }
+
+        fs.renameSync( //poe o file outro lugar
             resolve(upload.tmpFolder, file),
-            resolve(`${upload.tmpFolder}/${fldr}/${subfolder}`, file)
+            resolve(dir, file)
         )
 
         return file
     }
-    async delete(file: string, folder: string): Promise<void> {
-        throw new Error("Method not implemented.");
+
+    async delete({ file, folder }: IFilePath): Promise<void> {
+
+        let [fldr,] = folder.split("/", 2)// pega a primeira parte do split se houver, (vai vir do mime type)
+
+        let [, file_type] = file.split(/\.(?!.*\.)/, 2) // separa no ultimo ponto para pegar o tipo do arquivo ( o nome do arquivo salvo no bd)
+
+        const file_name = resolve(`${upload.tmpFolder}/${fldr}/${file_type}`, file)
+
+        try {
+            fs.statSync(file_name)
+        } catch {
+            return
+        }
+
+        fs.unlinkSync(file_name)
     }
 
 }
+
+export { LocalStorageProvider }

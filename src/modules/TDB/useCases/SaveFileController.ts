@@ -1,7 +1,7 @@
 import { AppError } from "@shared/errors/AppError";
 import { Request, Response } from "express";
 import { container } from "tsyringe";
-import { SaveFileUseCase } from "./SavaFileUseCase";
+import { SaveFileUseCase } from "./SaveFileUseCase";
 
 class SaveFileController {
 

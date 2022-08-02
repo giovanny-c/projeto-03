@@ -1,6 +1,6 @@
 import { injectable } from "tsyringe";
 
-import { IMailProvider } from "../IMailProvider";
+import { IMail, IMailProvider } from "../IMailProvider";
 
 import * as fs from "fs"
 import * as handlebars from "handlebars"
@@ -22,7 +22,7 @@ class SESMailProvider implements IMailProvider {
         })
     }
 
-    async sendMail(to: string, subject: any, variables: any, path: string): Promise<void> {
+    async sendMail({ to, subject, variables, path }: IMail): Promise<void> {
 
         const templateFileContent = fs.readFileSync(path).toString("utf-8")
 

@@ -4,7 +4,7 @@ import multer from "multer"
 import uploadConfig from "@config/upload"
 
 import { ensureAuthenticated } from "@shared/middlewares/ensureAuthenticated"
-import { SaveFileController } from "@modules/TDB/useCases/SaveDataController"
+import { SaveFileController } from "@modules/TDB/useCases/SaveFileController"
 
 const fileRoutes = Router()
 

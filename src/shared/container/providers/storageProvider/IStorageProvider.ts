@@ -1,8 +1,12 @@
+import { String } from "aws-sdk/clients/acm"
 
-
+interface IFilePath {
+    file: string,
+    folder: string
+}
 interface IStorageProvider {
-    save(file: string, folder: string): Promise<string>
-    delete(file: string, folder: string): Promise<void>
+    save({ file, folder }: IFilePath): Promise<string>
+    delete({ file, folder }: IFilePath): Promise<void>
 }
 
-export { IStorageProvider }
+export { IStorageProvider, IFilePath }

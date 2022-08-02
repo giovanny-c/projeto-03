@@ -1,7 +1,7 @@
 import { injectable } from "tsyringe";
 import * as nodemailer from "nodemailer"
 import { Transporter } from "nodemailer";
-import { IMailProvider } from "../IMailProvider";
+import { IMail, IMailProvider } from "../IMailProvider";
 
 import * as handlebars from "handlebars"
 import * as fs from "fs"
@@ -28,7 +28,7 @@ class EtherealMailProvider implements IMailProvider {
         }).catch(err => console.error(err))
     }
 
-    async sendMail(to: string, subject: any, variables: any, path: string): Promise<void> {
+    async sendMail({ to, subject, variables, path }: IMail): Promise<void> {
 
         //vai ler o arquivo e transformar em string utf-8
         const templateFileContent = fs.readFileSync(path).toString("utf-8")
