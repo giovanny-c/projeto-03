@@ -23,7 +23,7 @@ export class CreateStoreColumn1659038438094 implements MigrationInterface {
                     isNullable: false
                 },
                 {
-                    name: "_data",
+                    name: "mime_type",
                     type: "varchar",
                     isNullable: false
                 },
@@ -33,7 +33,7 @@ export class CreateStoreColumn1659038438094 implements MigrationInterface {
                     isNullable: false
                 },
                 {
-                    name: "updated_At",
+                    name: "updated_at",
                     type: "timestamp",
                     isNullable: true
                 },
@@ -59,6 +59,7 @@ export class CreateStoreColumn1659038438094 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.dropForeignKey("storage", "FKUserStorageData")
         await queryRunner.dropTable("storage")
     }
 

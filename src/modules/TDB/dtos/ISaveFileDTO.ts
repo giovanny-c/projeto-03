@@ -1,6 +1,6 @@
 
 
-interface ISaveData {
+interface ISaveFile {
 
     id?: string
 
@@ -8,11 +8,11 @@ interface ISaveData {
 
     name: string
 
-    _data: string
+    mime_type: string
 
     created_at?: Date
 
     updated_at?: Date
 }
 
-export { ISaveData }
+export { ISaveFile }

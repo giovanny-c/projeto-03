@@ -1,14 +1,17 @@
 import { Router } from "express"
+
 import multer from "multer"
+import uploadConfig from "@config/upload"
 
 import { ensureAuthenticated } from "@shared/middlewares/ensureAuthenticated"
-import { SaveDataController } from "@modules/TDB/useCases/SaveDataController"
+import { SaveFileController } from "@modules/TDB/useCases/SaveFileController"
 
 const fileRoutes = Router()
-const upload = multer()
 
-const saveDataController = new SaveDataController()
+const upload = multer(uploadConfig)
 
-fileRoutes.post("/save", ensureAuthenticated, upload.single, saveDataController.handle)
+const saveFileController = new SaveFileController()
+
+fileRoutes.post("/save", ensureAuthenticated, upload.single("file"), saveFileController.handle)
 
 export { fileRoutes }

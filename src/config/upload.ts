@@ -7,6 +7,7 @@ import { resolve } from "path"
 
 const tmpFolder = resolve(__dirname, "..", "..", "tmp")
 
+
 export default {
     tmpFolder, // pasta onde será salvo os arquivos
 

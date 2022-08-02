@@ -3,7 +3,7 @@ import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, PrimaryColumn } from
 import { v4 as uuidV4 } from "uuid"
 
 @Entity("storage")
-class _Data {
+class File {
 
     @PrimaryColumn()
     id: string
@@ -19,7 +19,7 @@ class _Data {
     name: string
 
     @Column() // futuramente Armazenar no aws bucket 
-    _data: string
+    mime_type: string
 
     @Column()
     created_at: Date
@@ -34,4 +34,4 @@ class _Data {
     }
 }
 
-export { _Data }
+export { File }
