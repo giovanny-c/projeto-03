@@ -6,6 +6,8 @@ import { UsersRepository } from "../../modules/accounts/repositories/implementat
 import { IUsersRepository } from "../../modules/accounts/repositories/IUsersRepository";
 import { IUsersTokensRepository } from "../../modules/accounts/repositories/IUsersTokensRepository";
 import { UsersTokensRepository } from "../../modules/accounts/repositories/implementations/UsersTokensRepository";
+import { IDataRepository } from "@modules/TDB/repositories/IDataRepository";
+import { DataRepository } from "@modules/TDB/repositories/implementations/DataRepository";
 
 
 container.registerSingleton<IUsersRepository>(
@@ -16,4 +18,9 @@ container.registerSingleton<IUsersRepository>(
 container.registerSingleton<IUsersTokensRepository>(
     "UsersTokensRepository",
     UsersTokensRepository
+)
+
+container.registerSingleton<IDataRepository>(
+    "DataRepository",
+    DataRepository
 )

@@ -13,6 +13,7 @@ import "@shared/container"
 //routes
 import { errorHandler } from "@shared/errors/ErrorHandler" //colocar em cima?
 import { accountRoutes } from "./routes/account.routes"
+import { fileRoutes } from "routes/file.routes"
 //import { config } from "../src/config/auth"
 
 
@@ -27,6 +28,7 @@ app.use(express.urlencoded({ extended: true }))//front
 // app.use(auth(config))
 
 app.use("/accounts", accountRoutes)
+app.use("/file", fileRoutes)
 
 
 app.use(errorHandler)//middleware de errors

@@ -48,3 +48,5 @@ class DataRepository implements IDataRepository {
     }
 
 }
+
+export { DataRepository }
