@@ -2,11 +2,12 @@ import { IUsersRepository } from "@modules/accounts/repositories/IUsersRepositor
 import { IDateProvider } from "@shared/container/providers/dateProvider/IDateProvider";
 import { IStorageProvider } from "@shared/container/providers/storageProvider/IStorageProvider";
 import { AppError } from "@shared/errors/AppError";
-import * as fs from "fs"
 import { inject, injectable } from "tsyringe";
 import { ISaveFile } from "../dtos/ISaveFileDTO";
 import { File } from "../entities/File";
 import { IFileRepository } from "../repositories/IFileRepository";
+
+import * as fs from "fs"
 
 @injectable()
 class SaveFileUseCase {
@@ -24,7 +25,7 @@ class SaveFileUseCase {
 
     }
 
-    async execute({ id, user_id, name, mime_type }: ISaveFile): Promise<File> {
+    async execute({ id, user_id, name, mime_type, path }: ISaveFile): Promise<File> {
         try {
 
             const userExists = await this.usersRepository.findById(user_id)
@@ -39,10 +40,16 @@ class SaveFileUseCase {
                 const fileExists = await this.fileRepository.findById(id as string)
 
                 if (!fileExists) {
+
+                    fs.unlinkSync(path as string)
+
                     throw new AppError("File not found")
                 }
 
                 if (userExists.id !== fileExists.user_id /*&& userExists.admin === false*/) {
+
+                    fs.unlinkSync(path as string)
+
                     throw new AppError("Error (You can't alter a file from other user)", 400)
                 }
 

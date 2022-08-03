@@ -17,12 +17,16 @@ class SaveFileController {
             const { id: user_id } = req.user
             const { file_id } = req.body
 
-            const { filename, mimetype } = req.file
+            const { filename, mimetype, path } = req.file
 
             const saveFileUseCase = container.resolve(SaveFileUseCase)
 
             const response = await saveFileUseCase.execute({
-                id: file_id, user_id, name: filename, mime_type: mimetype
+                id: file_id,
+                user_id,
+                name: filename,
+                mime_type: mimetype,
+                path
             })
 
             return res.status(201).json(response)

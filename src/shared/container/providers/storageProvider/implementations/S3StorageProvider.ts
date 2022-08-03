@@ -47,7 +47,13 @@ class S3StorageProvider implements IStorageProvider {
         return file
     }
     async delete({ file, folder }: IFilePath): Promise<void> {
-        throw new Error("Method not implemented.");
+
+        await this.client.deleteObject({
+            Bucket: `${process.env.AWS_BUCKET}/${folder}`,
+            Key: file,
+        }).promise()
     }
 
 }
+
+export { S3StorageProvider }

@@ -22,6 +22,9 @@ class File {
     mime_type: string
 
     @Column()
+    extension: string
+
+    @Column()
     created_at: Date
 
     @Column()

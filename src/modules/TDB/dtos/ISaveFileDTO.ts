@@ -13,6 +13,10 @@ interface ISaveFile {
     created_at?: Date
 
     updated_at?: Date
+
+    path?: string
+
+    extension?: string
 }
 
 export { ISaveFile }

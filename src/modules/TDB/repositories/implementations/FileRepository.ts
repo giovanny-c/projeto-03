@@ -13,13 +13,14 @@ class FileRepository implements IFileRepository {
         this.repository = dataSource.getRepository(File)
     }
 
-    async save({ id, user_id, name, mime_type, created_at, updated_at }: ISaveFile): Promise<File> {
+    async save({ id, user_id, name, mime_type, created_at, updated_at, extension }: ISaveFile): Promise<File> {
 
         const file = this.repository.create({
             id,
             user_id,
             name,
             mime_type,
+            extension,
             created_at,
             updated_at
         })
