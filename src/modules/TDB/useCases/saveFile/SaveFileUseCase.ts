@@ -3,9 +3,9 @@ import { IDateProvider } from "@shared/container/providers/dateProvider/IDatePro
 import { IStorageProvider } from "@shared/container/providers/storageProvider/IStorageProvider";
 import { AppError } from "@shared/errors/AppError";
 import { inject, injectable } from "tsyringe";
-import { ISaveFile } from "../dtos/ISaveFileDTO";
-import { File } from "../entities/File";
-import { IFileRepository } from "../repositories/IFileRepository";
+import { ISaveFile } from "../../dtos/ISaveFileDTO";
+import { File } from "../../entities/File";
+import { IFileRepository } from "../../repositories/IFileRepository";
 
 import * as fs from "fs"
 
@@ -28,6 +28,8 @@ class SaveFileUseCase {
     async execute({ id, user_id, name, mime_type, path, size }: ISaveFile): Promise<File> {
         try {
 
+
+
             const userExists = await this.usersRepository.findById(user_id)
 
             if (!userExists) {
@@ -38,6 +40,7 @@ class SaveFileUseCase {
 
             //update do arquivo
             if (id) {// busca o arquivo se existir o id
+
 
                 const fileExists = await this.fileRepository.findById(id as string)
 
@@ -53,6 +56,17 @@ class SaveFileUseCase {
                     fs.unlinkSync(path as string)
 
                     throw new AppError("Error (You can't alter a file from other user)", 400)
+                }
+
+
+
+                if (fileExists.storage_type !== process.env.STORAGE) {
+
+                    fs.unlinkSync(path as string)
+
+                    throw new AppError(`You can't save this file because the file with this id is stored in the ${fileExists.storage_type} storage. (Change the storage type to update the file)`, 400)
+
+
                 }
 
 
