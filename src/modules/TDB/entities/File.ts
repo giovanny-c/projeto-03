@@ -1,6 +1,7 @@
 import { User } from "../../accounts/entities/User";
 import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, PrimaryColumn } from "typeorm";
 import { v4 as uuidV4 } from "uuid"
+import { Expose } from "class-transformer";
 
 @Entity("storage")
 class File {
@@ -13,7 +14,7 @@ class File {
 
     @ManyToOne(() => User)
     @JoinColumn({ name: "user_id" })
-    user: User
+    user?: User
 
     @Column()
     name: string
@@ -31,10 +32,24 @@ class File {
     storage_type: string
 
     @Column()
-    created_at: Date
+    created_at?: Date
 
     @Column()
-    updated_at: Date
+    updated_at?: Date
+
+    @Expose({ name: "file_url" })
+    file_url(): string {
+        switch (process.env.STORAGE) {
+            case "local":
+                return `${process.env.APP_API_URL}/${this.mime_type}/${this.name}`
+
+            case "s3":
+                return `${process.env.AWS_BUCKET_URL}/${this.mime_type}/${this.name}`
+
+            default:
+                return "file url not found!"
+        }
+    }
 
     constructor() {
         if (!this.id) {

@@ -10,6 +10,8 @@ import "express-async-errors"
 import "./database"
 import "@shared/container"
 
+import upload from "@config/upload"
+
 //routes
 import { errorHandler } from "@shared/errors/ErrorHandler" //colocar em cima?
 import { accountRoutes } from "./routes/account.routes"
@@ -20,10 +22,15 @@ import { fileRoutes } from "routes/file.routes"
 const app = express()
 
 
+
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))//front
 
+app.use("/file", express.static(`${upload.tmpFolder}`))
+
+//toda vez que uma rota /file for chamada
+//vai acessar a pasta tmp/
 
 // app.use(auth(config))
 
