@@ -17,6 +17,11 @@ interface ISaveFile {
     path?: string
 
     extension?: string
+
+    size?: number
+
+    storage_type?: string
+
 }
 
 export { ISaveFile }

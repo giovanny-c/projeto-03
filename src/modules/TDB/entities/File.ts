@@ -25,6 +25,12 @@ class File {
     extension: string
 
     @Column()
+    size: number
+
+    @Column()
+    storage_type: string
+
+    @Column()
     created_at: Date
 
     @Column()

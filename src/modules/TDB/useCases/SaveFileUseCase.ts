@@ -25,7 +25,7 @@ class SaveFileUseCase {
 
     }
 
-    async execute({ id, user_id, name, mime_type, path }: ISaveFile): Promise<File> {
+    async execute({ id, user_id, name, mime_type, path, size }: ISaveFile): Promise<File> {
         try {
 
             const userExists = await this.usersRepository.findById(user_id)
@@ -33,6 +33,8 @@ class SaveFileUseCase {
             if (!userExists) {
                 throw new AppError("User not found", 400)
             }
+
+            let [, file_extension] = name.split(/\.(?!.*\.)/, 2)
 
             //update do arquivo
             if (id) {// busca o arquivo se existir o id
@@ -53,6 +55,8 @@ class SaveFileUseCase {
                     throw new AppError("Error (You can't alter a file from other user)", 400)
                 }
 
+
+
                 //remove o file antigo do storage
                 await this.storageProvider.delete({ file: fileExists.name, folder: fileExists.mime_type })
 
@@ -60,16 +64,34 @@ class SaveFileUseCase {
                 await this.storageProvider.save({ file: name, folder: mime_type })
 
                 //salva no bd, no lugar do antigo
-                return await this.fileRepository.save({ id, user_id, name, mime_type, updated_at: this.dateProvider.dateNow() })
+                return await this.fileRepository.save({
+                    id,
+                    user_id,
+                    name,
+                    mime_type,
+                    updated_at: this.dateProvider.dateNow(),
+                    size,
+                    storage_type: process.env.STORAGE,
+                    extension: file_extension
+                })
             }
 
             //salva no storage
             await this.storageProvider.save({ file: name, folder: mime_type })
 
             //salva no bd
-            return await this.fileRepository.save({ user_id, name, mime_type, created_at: this.dateProvider.dateNow() })
+            return await this.fileRepository.save({
+                user_id,
+                name,
+                mime_type,
+                created_at: this.dateProvider.dateNow(),
+                size,
+                storage_type: process.env.STORAGE,
+                extension: file_extension
+            })
 
-
+            //ADICONAR FILE_SIZE
+            //PERMITIR SO AULGUNS TIPOS DE ARQUIVO
         } catch (error) {
             throw error
         }

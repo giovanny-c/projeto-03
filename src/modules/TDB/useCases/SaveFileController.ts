@@ -17,7 +17,7 @@ class SaveFileController {
             const { id: user_id } = req.user
             const { file_id } = req.body
 
-            const { filename, mimetype, path } = req.file
+            const { filename, mimetype, path, size } = req.file
 
             const saveFileUseCase = container.resolve(SaveFileUseCase)
 
@@ -26,7 +26,8 @@ class SaveFileController {
                 user_id,
                 name: filename,
                 mime_type: mimetype,
-                path
+                path,
+                size
             })
 
             return res.status(201).json(response)
