@@ -19,7 +19,7 @@ class GetFileUseCase {
 
     }
 
-    async execute(user_id: string, file_id): Promise<File> {
+    async execute(file_id: string): Promise<File> {
         try {
 
             const file = await this.fileRepository.findById(file_id)

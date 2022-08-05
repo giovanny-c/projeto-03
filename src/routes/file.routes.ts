@@ -15,6 +15,6 @@ const saveFileController = new SaveFileController()
 const getFileController = new GetFileController()
 
 fileRoutes.post("/save", ensureAuthenticated, upload.single("file"), saveFileController.handle)
-fileRoutes.get("/get", getFileController.handle)
+fileRoutes.get("/get-file", ensureAuthenticated, getFileController.handle)
 
 export { fileRoutes }

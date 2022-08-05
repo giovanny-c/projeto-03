@@ -27,7 +27,6 @@ app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))//front
 
-app.use("/file", express.static(`${upload.tmpFolder}`))
 
 //toda vez que uma rota /file for chamada
 //vai acessar a pasta tmp/
@@ -36,6 +35,7 @@ app.use("/file", express.static(`${upload.tmpFolder}`))
 
 app.use("/accounts", accountRoutes)
 app.use("/file", fileRoutes)
+app.use("/get-file", express.static(`${upload.tmpFolder}/**/**`))
 
 
 app.use(errorHandler)//middleware de errors

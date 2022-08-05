@@ -8,6 +8,7 @@ import { File } from "../../entities/File";
 import { IFileRepository } from "../../repositories/IFileRepository";
 
 import * as fs from "fs"
+import { ISaveFileRequest } from "./SaveFileDTO";
 
 @injectable()
 class SaveFileUseCase {
@@ -25,7 +26,7 @@ class SaveFileUseCase {
 
     }
 
-    async execute({ id, user_id, name, mime_type, path, size }: ISaveFile): Promise<File> {
+    async execute({ id, user_id, name, mime_type, path, size }: ISaveFileRequest): Promise<File> {
         try {
 
 
