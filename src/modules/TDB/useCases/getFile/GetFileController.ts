@@ -8,7 +8,7 @@ class GetFileController {
     async handle(req: Request, res: Response): Promise<Response> {
         try {
 
-            const { file_id } = req.body
+            const { id: file_id } = req.params
             const { id: user_id } = req.user
 
             const getFileUseCase = container.resolve(GetFileUseCase)

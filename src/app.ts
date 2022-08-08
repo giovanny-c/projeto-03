@@ -35,7 +35,7 @@ app.use(express.urlencoded({ extended: true }))//front
 
 app.use("/accounts", accountRoutes)
 app.use("/file", fileRoutes)
-app.use("/get-file", express.static(`${upload.tmpFolder}/**/**`))
+app.use(["/accounts/user/file/:id", "/accounts/user/files"], express.static(`${upload.tmpFolder}/**/**`))
 
 
 app.use(errorHandler)//middleware de errors

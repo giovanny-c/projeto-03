@@ -42,7 +42,7 @@ class File {
 
     @Expose({ name: "file_url" })
     file_url(): string {
-        switch (process.env.STORAGE) {
+        switch (this.storage_type) {
             case "local":
                 return `${process.env.APP_API_URL}/${this.mime_type}/${this.name}`
 

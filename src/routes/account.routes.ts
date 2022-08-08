@@ -14,6 +14,8 @@ import { GeneratePdfController } from "../modules/accounts/useCases/generatePdf/
 //middlewares
 import { ensureAuthenticated } from "../shared/middlewares/ensureAuthenticated";
 import multer from "multer"
+import { GetFileFromUserController } from "@modules/TDB/useCases/getFilesFromUser/GetFileFromUserController";
+import { GetFileController } from "@modules/TDB/useCases/getFile/GetFileController";
 
 const upload = multer()
 
@@ -29,6 +31,8 @@ const logOutController = new LogOutController()
 const sendForgotPasswordMailController = new SendForgotPasswordMailController()
 const retrievePasswordController = new RetrievePasswordController()
 const generatePdfController = new GeneratePdfController()
+const getFileController = new GetFileController()
+const getFileFromUserController = new GetFileFromUserController()
 
 accountRoutes.post("/sign-in", upload.none(), createUserController.handle)
 accountRoutes.get("/sign-in", signInController.handle)
@@ -41,6 +45,8 @@ accountRoutes.patch("/log-out", ensureAuthenticated, logOutController.handle)
 accountRoutes.post("/forgot-password", upload.none(), sendForgotPasswordMailController.handle)
 accountRoutes.put("/retrieve-password", upload.none(), retrievePasswordController.handle)
 accountRoutes.post("/gen-pdf", ensureAuthenticated, upload.none(), generatePdfController.handle)
+accountRoutes.get("/user/files", ensureAuthenticated, getFileFromUserController.handle)
+accountRoutes.get("/user/file/:id", ensureAuthenticated, getFileController.handle)
 
 
 export { accountRoutes }
