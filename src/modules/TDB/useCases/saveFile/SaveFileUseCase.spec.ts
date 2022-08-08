@@ -1,11 +1,15 @@
 import upload from "@config/upload"
 import { UsersRepositoryInMemory } from "@modules/accounts/repositories/In-memory/UsersRepositoryInMemory"
 import { ISaveFile } from "@modules/TDB/dtos/ISaveFileDTO"
+import { File } from "@modules/TDB/entities/File"
 import { FileRepositoryInMemory } from "@modules/TDB/repositories/In-memory/FileRepositoryInMemory"
 import { DayjsDateProvider } from "@shared/container/providers/dateProvider/implementations/DayjsDateProvider"
 import { LocalStorageProvider } from "@shared/container/providers/storageProvider/implementations/LocalStorageProvider"
+import { StorageProviderInMemory } from "@shared/container/providers/storageProvider/In-memory/StorageProviderInMemory"
 import { ISaveFileRequest } from "./SaveFileDTO"
 import { SaveFileUseCase } from "./SaveFileUseCase"
+
+
 
 
 
@@ -13,7 +17,7 @@ let saveFileUseCase: SaveFileUseCase
 let usersRepository: UsersRepositoryInMemory
 let fileRepository: FileRepositoryInMemory
 let dateProvider: DayjsDateProvider
-let storageProvider: LocalStorageProvider
+let storageProvider: StorageProviderInMemory
 
 describe("save a File", () => {
 
@@ -22,15 +26,18 @@ describe("save a File", () => {
         dateProvider = new DayjsDateProvider()
         fileRepository = new FileRepositoryInMemory()
         usersRepository = new UsersRepositoryInMemory()
-        storageProvider = new LocalStorageProvider()
+        storageProvider = new StorageProviderInMemory()
         saveFileUseCase = new SaveFileUseCase(fileRepository, dateProvider, usersRepository, storageProvider)
 
     })
 
     it("Should save a file that do not exist in the db", async () => {
 
-        let name = "3223d23dd23d23d2-01.png"
-        let mime_type = "image/png"
+        const saveFile = jest.spyOn(storageProvider, "save")
+
+
+        let name = "3223d23dd23d23d2-TEST.txt"
+        let mime_type = "text/plain"
 
         const user = await usersRepository.save({
             email: "test@email.com",
@@ -46,15 +53,20 @@ describe("save a File", () => {
             id: "",
             name,
             mime_type,
-            path: `${upload.tmpFolder}/${mime_type}/${name}`,
+            path: `${upload.tmpFolder}/${name}`,
             user_id: user.id as string,
             size: 3,
         }
 
         const response = await saveFileUseCase.execute(file)
 
-        expect(response).toEqual(File)
+        expect(saveFile).toHaveBeenCalled()
+        expect(saveFile).toReturn()
+        expect(response).toHaveProperty("id")
+        expect(response).toHaveProperty("created_at")
+        expect(response).toHaveProperty("name", name)
 
+        storageProvider.delete({ file: name, folder: mime_type })
 
     })
 

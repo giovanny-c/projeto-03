@@ -4,7 +4,7 @@ import { FileMap } from "@modules/TDB/mapper/FileMap";
 import { IFileRepository } from "@modules/TDB/repositories/IFileRepository";
 import { AppError } from "@shared/errors/AppError";
 import { inject, injectable } from "tsyringe";
-
+import { IFileResponseDTO } from "@modules/TDB/dtos/IFileResponseDTO"
 
 @injectable()
 class GetFileUseCase {
@@ -19,7 +19,7 @@ class GetFileUseCase {
 
     }
 
-    async execute(file_id: string): Promise<File> {
+    async execute(file_id: string): Promise<IFileResponseDTO> {
         try {
 
             const file = await this.fileRepository.findById(file_id)
@@ -27,8 +27,10 @@ class GetFileUseCase {
             if (!file) {
                 throw new AppError("File not found!", 400)
             }
+            const a = FileMap.toDTO(file)
 
-            return FileMap.toDTO(file)
+            return a
+
 
         } catch (error) {
             throw error
