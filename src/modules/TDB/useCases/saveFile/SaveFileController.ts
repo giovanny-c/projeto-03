@@ -15,7 +15,9 @@ class SaveFileController {
             }
 
             const { id: user_id } = req.user
-            const { file_id } = req.body
+            const { file_id, is_public } = req.body
+
+
 
             const { filename, mimetype, path, size } = req.file
 
@@ -27,7 +29,8 @@ class SaveFileController {
                 name: filename,
                 mime_type: mimetype,
                 path,
-                size
+                size,
+                is_public: is_public === "true" ? true : false //pq nao da para mandar boolean no multipart-form
             })
 
             return res.status(201).json(response)

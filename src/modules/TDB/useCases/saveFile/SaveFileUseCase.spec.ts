@@ -59,6 +59,7 @@ describe("save a File", () => {
             path: `${upload.tmpFolder}/${name}`,
             user_id: user.id as string,
             size: 3,
+            is_public: true,
         }
 
         const response = await saveFileUseCase.execute(file)
@@ -107,6 +108,7 @@ describe("save a File", () => {
             path: `${upload.tmpFolder}/${name}`,
             user_id: user.id as string,
             size: 3,
+            is_public: true,
         })
 
         expect(saveFile).toHaveBeenCalled()
@@ -158,6 +160,7 @@ describe("save a File", () => {
                 path: `${upload.tmpFolder}/${name}`,
                 user_id: user.id as string,
                 size: 3,
+                is_public: true,
             })
         ).rejects.toEqual(new AppError("File not found", 400))
 
@@ -202,6 +205,7 @@ describe("save a File", () => {
                 path: `${upload.tmpFolder}/${name}`,
                 user_id: "fake_user_id_dasdewewwsedd",
                 size: 3,
+                is_public: true,
             })
         ).rejects.toEqual(new AppError("User not found", 400))
 
@@ -257,8 +261,9 @@ describe("save a File", () => {
                 path: `${upload.tmpFolder}/${name}`,
                 user_id: user2.id as string,
                 size: 3,
+                is_public: true,
             })
-        ).rejects.toEqual(new AppError("Error (You can't alter a file from other user)", 400))
+        ).rejects.toEqual(new AppError("Error (You can't alter a file from other user)", 403))
 
     })
 
@@ -303,9 +308,10 @@ describe("save a File", () => {
                 path: `${upload.tmpFolder}/${name}`,
                 user_id: user.id as string,
                 size: 3,
+                is_public: true,
             })
 
-        ).rejects.toEqual(new AppError(`You can't save this file because the file with this id is stored in the ${storage_type} storage. (Change the storage type to update the file)`, 400))
+        ).rejects.toEqual(new AppError(`You can't save this file because the file with this id is stored in the ${storage_type} storage. (Change the storage type to update the file)`, 403))
 
     })
 

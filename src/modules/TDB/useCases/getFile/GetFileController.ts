@@ -9,10 +9,11 @@ class GetFileController {
         try {
 
             const { file_id } = req.body
+            const { id: user_id } = req.user
 
             const getFileUseCase = container.resolve(GetFileUseCase)
 
-            const response = await getFileUseCase.execute(file_id)// temp
+            const response = await getFileUseCase.execute(file_id, user_id)// temp
 
             return res.status(200).json(response)
 

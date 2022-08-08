@@ -32,6 +32,9 @@ class File {
     storage_type: string
 
     @Column()
+    permission: string
+
+    @Column()
     created_at?: Date
 
     @Column()

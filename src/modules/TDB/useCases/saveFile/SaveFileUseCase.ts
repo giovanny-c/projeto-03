@@ -26,7 +26,7 @@ class SaveFileUseCase {
 
     }
 
-    async execute({ id, user_id, name, mime_type, path, size }: ISaveFileRequest): Promise<File> {
+    async execute({ id, user_id, name, mime_type, path, size, is_public = true }: ISaveFileRequest): Promise<File> {
         try {
 
 
@@ -38,6 +38,8 @@ class SaveFileUseCase {
             }
 
             let [, file_extension] = name.split(/\.(?!.*\.)/, 2)
+
+            let permission = is_public ? "public" : "private"
 
             //update do arquivo
             if (id) {// busca o arquivo se existir o id
@@ -56,7 +58,7 @@ class SaveFileUseCase {
 
                     fs.unlinkSync(path as string)
 
-                    throw new AppError("Error (You can't alter a file from other user)", 400)
+                    throw new AppError("Error (You can't alter a file from other user)", 403)
                 }
 
 
@@ -65,7 +67,7 @@ class SaveFileUseCase {
 
                     fs.unlinkSync(path as string)
 
-                    throw new AppError(`You can't save this file because the file with this id is stored in the ${fileExists.storage_type} storage. (Change the storage type to update the file)`, 400)
+                    throw new AppError(`You can't save this file because the file with this id is stored in the ${fileExists.storage_type} storage. (Change the storage type to update the file)`, 403)
 
 
                 }
@@ -87,7 +89,8 @@ class SaveFileUseCase {
                     updated_at: this.dateProvider.dateNow(),
                     size,
                     storage_type: process.env.STORAGE,
-                    extension: file_extension
+                    extension: file_extension,
+                    permission
                 })
             }
 
@@ -102,7 +105,8 @@ class SaveFileUseCase {
                 created_at: this.dateProvider.dateNow(),
                 size,
                 storage_type: process.env.STORAGE,
-                extension: file_extension
+                extension: file_extension,
+                permission
             })
 
             //ADICONAR FILE_SIZE

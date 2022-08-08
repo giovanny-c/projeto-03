@@ -9,6 +9,7 @@ interface IFileResponseDTO {
     extension: string
     size: number
     storage_type: string
+    permissiom?: string
     created_at?: Date
     updated_at?: Date
     file_url(): string

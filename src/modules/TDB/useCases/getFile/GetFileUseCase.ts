@@ -19,17 +19,24 @@ class GetFileUseCase {
 
     }
 
-    async execute(file_id: string): Promise<IFileResponseDTO> {
+    async execute(file_id: string, user_id: string): Promise<IFileResponseDTO> {
         try {
+
+
 
             const file = await this.fileRepository.findById(file_id)
 
             if (!file) {
                 throw new AppError("File not found!", 400)
             }
-            const a = FileMap.toDTO(file)
 
-            return a
+
+            if (file.permission === "private" && file.user_id !== user_id) {
+                throw new AppError("You cant access this file, since you do not own it", 403)
+            }
+
+
+            return FileMap.toDTO(file)
 
 
         } catch (error) {

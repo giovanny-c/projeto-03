@@ -8,7 +8,7 @@ class FileRepositoryInMemory implements IFileRepository {
 
     private repository: File[] = []
 
-    async save({ id = uuidV4(), mime_type, name, user_id, extension, path, size, storage_type, created_at = new Date(), updated_at }: ISaveFile): Promise<File> {
+    async save({ id = uuidV4(), mime_type, name, user_id, extension, path, size, storage_type, created_at = new Date(), updated_at, permission = "public" }: ISaveFile): Promise<File> {
 
         let file = new File()
 
@@ -20,6 +20,7 @@ class FileRepositoryInMemory implements IFileRepository {
             extension,
             path,
             size,
+            permission,
             created_at,
             updated_at,
             storage_type

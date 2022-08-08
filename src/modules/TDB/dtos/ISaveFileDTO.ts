@@ -10,10 +10,6 @@ interface ISaveFile {
 
     mime_type: string
 
-    created_at?: Date
-
-    updated_at?: Date
-
     path?: string
 
     extension?: string
@@ -22,6 +18,11 @@ interface ISaveFile {
 
     storage_type?: string
 
+    permission?: string
+
+    created_at?: Date
+
+    updated_at?: Date
 }
 
 export { ISaveFile }

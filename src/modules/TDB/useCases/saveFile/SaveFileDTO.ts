@@ -7,6 +7,7 @@ interface ISaveFileRequest {
     mime_type: string
     path: string
     size: number
+    is_public: boolean
 }
 
 export { ISaveFileRequest }

@@ -14,6 +14,7 @@ class FileMap {
         extension,
         size,
         storage_type,
+        permission,
         created_at,
         updated_at,
         file_url }: File): IFileResponseDTO {
@@ -27,6 +28,7 @@ class FileMap {
             extension,
             size,
             storage_type,
+            permission,
             created_at,
             updated_at,
             file_url
