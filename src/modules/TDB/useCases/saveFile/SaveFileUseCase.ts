@@ -30,12 +30,14 @@ class SaveFileUseCase {
         try {
 
 
+            /*nao é necessario verificar se o user existe pois ja é feito no middleware de auth*/
 
             const userExists = await this.usersRepository.findById(user_id)
 
             if (!userExists) {
                 throw new AppError("User not found", 400)
             }
+
 
             let [, file_extension] = name.split(/\.(?!.*\.)/, 2)
 
@@ -54,7 +56,7 @@ class SaveFileUseCase {
                     throw new AppError("File not found", 400)
                 }
 
-                if (userExists.id !== fileExists.user_id /*&& userExists.admin === false*/) {
+                if (user_id !== fileExists.user_id /*&& userExists.admin === false*/) {
 
                     fs.unlinkSync(path as string)
 

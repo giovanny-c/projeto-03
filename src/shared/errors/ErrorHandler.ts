@@ -3,6 +3,8 @@ import { AxiosError } from "axios";
 import { NextFunction, Request, Response } from "express"
 import { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
 import { AppError } from "./AppError"
+import { AWSError } from "aws-sdk";
+
 
 
 

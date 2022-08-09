@@ -5,6 +5,7 @@ import uploadConfig from "@config/upload"
 
 import { ensureAuthenticated } from "@shared/middlewares/ensureAuthenticated"
 import { SaveFileController } from "@modules/TDB/useCases/saveFile/SaveFileController"
+import { DeleteFileController } from "@modules/TDB/useCases/deleteFile/DeleteFileController"
 
 
 const fileRoutes = Router()
@@ -12,9 +13,10 @@ const fileRoutes = Router()
 const upload = multer(uploadConfig)
 
 const saveFileController = new SaveFileController()
-
+const deleteFileController = new DeleteFileController()
 
 fileRoutes.post("/save", ensureAuthenticated, upload.single("file"), saveFileController.handle)
+fileRoutes.delete("/delete", ensureAuthenticated, upload.none(), deleteFileController.handle)
 
 
 export { fileRoutes }

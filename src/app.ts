@@ -35,6 +35,7 @@ app.use(express.urlencoded({ extended: true }))//front
 
 app.use("/accounts", accountRoutes)
 app.use("/file", fileRoutes)
+
 app.use(["/accounts/user/file/:id", "/accounts/user/files"], express.static(`${upload.tmpFolder}/**/**`))
 
 

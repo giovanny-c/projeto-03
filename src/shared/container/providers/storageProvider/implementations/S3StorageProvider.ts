@@ -1,4 +1,4 @@
-import { S3 } from "aws-sdk";
+import { AWSError, S3 } from "aws-sdk";
 
 import upload from "@config/upload";
 
@@ -24,33 +24,48 @@ class S3StorageProvider implements IStorageProvider {
 
     async save({ file, folder }: IFilePath): Promise<string> {
 
-        const originalname = resolve(upload.tmpFolder, file) //arquivo salvo(tmp)
+        try {
 
-        // let file_type = mime.getExtension(originalname) //pega a extensao
 
-        const bucketName = `${process.env.AWS_BUCKET}/${folder}`
+            const originalname = resolve(upload.tmpFolder, file) //arquivo salvo(tmp)
 
-        const fileContent = fs.readFileSync(originalname)
+            // let file_type = mime.getExtension(originalname) //pega a extensao
 
-        const contentType = mime.getType(originalname) as string
+            const bucketName = `${process.env.AWS_BUCKET}/${folder}`
 
-        await this.client.putObject({
-            Bucket: bucketName,
-            Key: file,
-            ACL: "public-read",
-            Body: fileContent,
-            ContentType: contentType
-        }).promise()
+            const fileContent = fs.readFileSync(originalname)
 
-        fs.unlinkSync(originalname)
+            const contentType = mime.getType(originalname) as string
 
-        return file
+            await this.client.putObject({
+                Bucket: bucketName,
+                Key: file,
+                ACL: "public-read",
+                Body: fileContent,
+                ContentType: contentType
+
+            }, (err) => {
+                if (err) throw err
+            }).promise()
+
+            fs.unlinkSync(originalname)
+
+            return file
+
+        } catch (error) {
+            throw error
+        }
     }
     async delete({ file, folder }: IFilePath): Promise<void> {
 
         await this.client.deleteObject({
             Bucket: `${process.env.AWS_BUCKET}/${folder}`,
             Key: file,
+
+        }, (err) => {
+
+            if (err) throw err
+
         }).promise()
     }
 

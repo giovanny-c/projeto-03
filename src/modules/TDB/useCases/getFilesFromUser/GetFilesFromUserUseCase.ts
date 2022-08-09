@@ -19,11 +19,18 @@ class GetFilesFromUserUseCase {
 
     async execute(user_id: string): Promise<IFileResponseDTO[]> {
 
-        const files = await this.fileRepository.findByUserId(user_id)
+        try {
 
-        return files.map(file => {
-            return FileMap.toDTO(file)
-        });
+
+            const files = await this.fileRepository.findByUserId(user_id)
+
+            return files.map(file => {
+                return FileMap.toDTO(file)
+            });
+
+        } catch (error) {
+            throw error
+        }
     }
 
 }
