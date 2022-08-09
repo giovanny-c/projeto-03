@@ -33,7 +33,7 @@ class DeleteFileUseCase {
             const file = await this.fileRepository.findById(file_id)
 
             if (file.user_id !== user.id) {
-                throw new AppError("You cant delete this file. (since you do not own it)", 403)
+                throw new AppError("File not found OR (You cant delete this file. Since you do not own it.)", 404)// no lugar do forbidden, para user que nao é dono nao saber que file existe
             }
 
             await this.storageProvider.delete({ file: file.name, folder: file.mime_type })
