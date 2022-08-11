@@ -107,7 +107,7 @@ describe("Return a file with the given id", () => {
             permission: "private"
         })
 
-        await expect(getFileUseCase.execute(id, "fake_user_id_d2d8j23jd28d")).rejects.toEqual(new AppError("You cant access this file, since you do not own it", 403))
+        await expect(getFileUseCase.execute(id, "fake_user_id_d2d8j23jd28d")).rejects.toEqual(new AppError("You cant access this file, since you do not own it", 401))
 
 
 

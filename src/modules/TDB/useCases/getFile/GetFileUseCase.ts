@@ -32,7 +32,7 @@ class GetFileUseCase {
 
 
             if (file.permission === "private" && file.user_id !== user_id) {
-                throw new AppError("You cant access this file, since you do not own it", 403)
+                throw new AppError("You cant access this file, since you do not own it", 401)
             }
 
 

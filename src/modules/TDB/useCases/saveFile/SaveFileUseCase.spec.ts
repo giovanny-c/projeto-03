@@ -311,7 +311,7 @@ describe("save a File", () => {
                 is_public: true,
             })
 
-        ).rejects.toEqual(new AppError(`You can't save this file because the file with this id is stored in the ${storage_type} storage. (Change the storage type to update the file)`, 403))
+        ).rejects.toEqual(new AppError(`You can't save this file because the file with this id is stored in the ${storage_type} storage. (Change the storage type to update the file)`, 500))
 
     })
 

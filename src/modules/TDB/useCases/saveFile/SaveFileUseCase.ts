@@ -69,7 +69,7 @@ class SaveFileUseCase {
 
                     fs.unlinkSync(path as string)
 
-                    throw new AppError(`You can't save this file because the file with this id is stored in the ${fileExists.storage_type} storage. (Change the storage type to update the file)`, 403)
+                    throw new AppError(`You can't save this file because the file with this id is stored in the ${fileExists.storage_type} storage. (Change the storage type to update the file)`, 500)
 
 
                 }
