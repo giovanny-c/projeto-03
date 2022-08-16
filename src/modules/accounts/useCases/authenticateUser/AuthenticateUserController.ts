@@ -14,6 +14,15 @@ class AuthenticateUserController {
 
             const response = await authenticateUser.execute({ email, password })
 
+            // const sess = req.session
+            // console.log(sess)
+            if (process.env.SESSION_TYPE === "SESSION") {
+
+
+
+                return res.json({ "session": req.session, "user": response })
+            }
+
             return res.json(response)
             //render("page", {response})
 

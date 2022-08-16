@@ -8,7 +8,7 @@ import { AppError } from "../../../../shared/errors/AppError";
 import { validatePassword } from "../../../../utils/passwordUtils/passwordUtils";
 import issueJWT from "../../../../utils/tokensUtils/issueJWT";
 import { PRIV_KEY } from "../../../../utils/keyUtils/readKeys";
-import { ITokensResponse } from "@modules/accounts/dtos/ITokensResponseDTO";
+import { ICookieResponse, ITokensResponse } from "@modules/accounts/dtos/ITokensResponseDTO";
 import { IAuthenticateUserRequest } from "./AuthenticateUserDTO";
 
 
@@ -33,64 +33,96 @@ class AuthenticateUserUseCase {
     async execute({ email, password }: IAuthenticateUserRequest): Promise<ITokensResponse> {
         try {
 
-            const user = await this.usersRepository.findByEmail(email)
+            if (process.env.SESSION_TYPE === "SESSION") {
+
+                const user = await this.usersRepository.findByEmail(email)
 
 
-            if (!user) {
-                throw new AppError("email or password incorrect")
+                if (!user) {
+                    throw new AppError("email or password incorrect")
+                }
+
+                if (!user.is_confirmed) {
+                    throw new AppError("You need to confirm your account before you loggin for the first time. Please check your email for the confirmation register email", 400)
+                }
+
+                //const passwordMatch = await compare(password, user.password)
+
+                if (!validatePassword(password, user.salt, user.password_hash)) {
+                    throw new AppError("email or password incorrect")
+                }
+
+
+                await this.usersRepository.markUserAsLogged(user.id as string)
+
+
+                return {
+                    user: {
+                        id: user.id as string,
+                        email: user.email as string
+                    }
+                }
+
             }
-
-            if (!user.is_confirmed) {
-                throw new AppError("You need to confirm your account before you loggin for the first time. Please check your email for the confirmation register email", 400)
-            }
-
-            //const passwordMatch = await compare(password, user.password)
-
-            if (!validatePassword(password, user.salt, user.password_hash)) {
-                throw new AppError("email or password incorrect")
-            }
+            else {
+                const user = await this.usersRepository.findByEmail(email)
 
 
-            await this.usersRepository.markUserAsLogged(user.id as string)
+                if (!user) {
+                    throw new AppError("email or password incorrect")
+                }
 
-            //deleta todos os tokens de outros logins
-            //deletar ao logar ou deletar ao expirar(fazer func para isso no bd) ??? 
-            await this.usersTokensRepository.deleteByUserId(user.id as string)
+                if (!user.is_confirmed) {
+                    throw new AppError("You need to confirm your account before you loggin for the first time. Please check your email for the confirmation register email", 400)
+                }
 
+                //const passwordMatch = await compare(password, user.password)
 
-            //-------access-token------- 
-
-            //manda o refresh dentro do jwt
-            const token = issueJWT({ payload: email, subject: user.id, key: PRIV_KEY, expiresIn: process.env.EXPIRES_IN_TOKEN as string })
-
-            //-----refresh token-------- 
-            const refresh_token = uuidV4()// pode ser uuid?
-
-            const token_family = uuidV4()//cria a familia do refresh token
-            //para marcar todos os tokens da mesma familia como invalidos, caso algum tenha sido usado mais de uma vez
-            //é necessario ???
-
-            const refresh_token_expires_date = this.dateProvider.addOrSubtractTime("add", "day", Number(process.env.EXPIRES_REFRESH_TOKEN_DAYS))
-
-            await this.usersTokensRepository.save({
-                token: refresh_token,
-                expires_date: refresh_token_expires_date, //30d
-                user_id: user.id as string,
-                is_valid: true,
-                was_used: false,
-                token_family,
-
-            })
+                if (!validatePassword(password, user.salt, user.password_hash)) {
+                    throw new AppError("email or password incorrect")
+                }
 
 
+                await this.usersRepository.markUserAsLogged(user.id as string)
 
-            return {
-                user: {
-                    email
-                },
-                token: `Bearer ${token}`,
-                //  expires_date: token_expires_date,
-                refresh_token
+                //deleta todos os tokens de outros logins
+                //deletar ao logar ou deletar ao expirar(fazer func para isso no bd) ??? 
+                await this.usersTokensRepository.deleteByUserId(user.id as string)
+
+
+                //-------access-token------- 
+
+                //manda o refresh dentro do jwt
+                const token = issueJWT({ payload: email, subject: user.id, key: PRIV_KEY, expiresIn: process.env.EXPIRES_IN_TOKEN as string })
+
+                //-----refresh token-------- 
+                const refresh_token = uuidV4()// pode ser uuid?
+
+                const token_family = uuidV4()//cria a familia do refresh token
+                //para marcar todos os tokens da mesma familia como invalidos, caso algum tenha sido usado mais de uma vez
+                //é necessario ???
+
+                const refresh_token_expires_date = this.dateProvider.addOrSubtractTime("add", "day", Number(process.env.EXPIRES_REFRESH_TOKEN_DAYS))
+
+                await this.usersTokensRepository.save({
+                    token: refresh_token,
+                    expires_date: refresh_token_expires_date, //30d
+                    user_id: user.id as string,
+                    is_valid: true,
+                    was_used: false,
+                    token_family,
+
+                })
+
+                return {
+                    user: {
+                        id: user.id as string,
+                        email
+                    },
+                    token: `Bearer ${token}`,
+                    //  expires_date: token_expires_date,
+                    refresh_token
+                }
             }
 
 
@@ -98,6 +130,7 @@ class AuthenticateUserUseCase {
         } catch (error) {
             throw error
         }
+
     }
 
 }

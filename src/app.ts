@@ -1,19 +1,19 @@
 import "reflect-metadata"
 import express from "express"
-
-
 import cors from "cors"
-
-// import { auth, requiresAuth } from "express-openid-connect"
-
 import "express-async-errors"
 
+import session from "express-session"
+import * as redis from "redis"
+import connectRedis from "connect-redis"
+// import { auth, requiresAuth } from "express-openid-connect"
 
-//db ,session e containers
+//db e containers
 import "./database"
-import session from "session/redis/index"
 import "@shared/container"
 
+
+//multer upload 
 import upload from "@config/upload"
 
 //routes
@@ -25,16 +25,48 @@ import { fileRoutes } from "routes/file.routes"
 
 const app = express()
 
-
-
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))//front
 
-//session redis
-app.use(session)
 
-// app.use(auth(config))
+//redis e session config
+const RedisStore = connectRedis(session)
+
+//config redis client
+const redisClient = redis.createClient({
+    legacyMode: true,
+    socket: {
+        host: process.env.REDIS_HOST,
+        port: Number(process.env.REDIS_PORT),
+    },
+
+})
+
+redisClient.on("error", (err) => {
+    console.log(`Could not establish  a connection with redis. ${err}`)
+})
+redisClient.on("connect", (err) => {
+    console.log("Connected to redis!")
+})
+
+redisClient.connect()
+
+app.use(session({
+    store: new RedisStore({ client: redisClient as any }),//por que o type nao vai
+    secret: process.env.SESSION_SECRET as string,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        secure: false, //true so transmite o cookie via https
+        httpOnly: false, //true nao deixa o client ler o cookie
+        maxAge: 1000 * 60 * 10 //10 min
+    }
+}))
+
+
+
+// app.use(auth(config)) 
 
 app.use("/accounts", accountRoutes)
 app.use("/file", fileRoutes)

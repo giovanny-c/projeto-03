@@ -1,12 +1,24 @@
 
 interface ITokensResponse {
-    user?: {
+    user: {
+        id: string
         email: string
     }
-    token: string
+    token?: string
     refresh_token?: string
 
 
 }
+interface ICookieResponse {
+    Session: {
+        cookie: {
+            path: string
+            _expires: Date
+            originalMaxAge: number
+            httpOnly: boolean
+            secure: boolean
+        }
+    }
+}
 
-export { ITokensResponse }
+export { ITokensResponse, ICookieResponse }
