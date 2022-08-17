@@ -30,7 +30,9 @@ class LogOutUseCase {
 
             await this.usersRepository.unmarkUserAsLogged(user_id)
 
-            await this.usersTokensRepository.setTokenFamilyAsInvalid({ user_id })
+            if (process.env.SESSION_TYPE === "JWT") {
+                await this.usersTokensRepository.setTokenFamilyAsInvalid({ user_id })
+            }
 
         } catch (error) {
 

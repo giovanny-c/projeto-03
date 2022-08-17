@@ -8,7 +8,7 @@ import { AppError } from "../../../../shared/errors/AppError";
 import { v4 as uuidV4 } from "uuid"
 import issueJWT from "../../../../utils/tokensUtils/issueJWT";
 import { PRIV_KEY } from "../../../../utils/keyUtils/readKeys";
-import { ITokensResponse } from "@modules/accounts/dtos/ITokensResponseDTO";
+import { IAuthenticationResponse } from "@modules/accounts/dtos/IAuthenticationResponseDTO";
 import { ITokenRequest } from "@modules/accounts/dtos/ITokensRequestDTO";
 
 
@@ -28,7 +28,7 @@ class RefreshTokenUseCase {
 
     }
 
-    async execute({ token: refresh_token }: ITokenRequest): Promise<ITokensResponse> {
+    async execute({ token: refresh_token }: ITokenRequest): Promise<IAuthenticationResponse> {
 
 
         const refreshToken = await this.usersTokensRepository.findByRefreshToken(refresh_token)
@@ -106,6 +106,9 @@ class RefreshTokenUseCase {
 
 
         return {
+            user: {
+                id: user_id as string
+            },
             token: `Bearer ${newToken}`,
             // expires_date: token_expires_date,
             refresh_token: newRefreshToken.token

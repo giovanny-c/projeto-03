@@ -53,7 +53,7 @@ redisClient.on("connect", (err) => {
 redisClient.connect()
 
 app.use(session({
-    store: new RedisStore({ client: redisClient as any }),//por que o type nao vai
+    store: new RedisStore({ client: redisClient as any }),
     secret: process.env.SESSION_SECRET as string,
     resave: false,
     saveUninitialized: false,

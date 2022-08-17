@@ -24,6 +24,8 @@ describe("Authenticate a User", () => {
 
     })
 
+    //fezer test pra session
+
     it("Should be able to authenticate an user", async () => {
 
 

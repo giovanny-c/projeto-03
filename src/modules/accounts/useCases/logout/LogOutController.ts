@@ -14,6 +14,8 @@ class LogOutController {
 
         await logOut.execute({ user_id: id })
 
+        req.session.destroy()
+
         return res.status(200).send()
         // return res.redirect("/accounts/login")
     }

@@ -49,12 +49,5 @@ accountRoutes.get("/user/files", ensureAuthenticated, getFileFromUserController.
 accountRoutes.get("/user/file/:id", ensureAuthenticated, getFileController.handle)
 
 
-accountRoutes.post("/session", (req, res) => {
-    const sess = req.session
-
-    const { email, password } = req.body
-    console.log(sess)
-    res.send()
-})
 
 export { accountRoutes }

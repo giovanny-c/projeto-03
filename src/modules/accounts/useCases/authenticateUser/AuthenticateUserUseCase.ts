@@ -8,7 +8,7 @@ import { AppError } from "../../../../shared/errors/AppError";
 import { validatePassword } from "../../../../utils/passwordUtils/passwordUtils";
 import issueJWT from "../../../../utils/tokensUtils/issueJWT";
 import { PRIV_KEY } from "../../../../utils/keyUtils/readKeys";
-import { ICookieResponse, ITokensResponse } from "@modules/accounts/dtos/ITokensResponseDTO";
+import { IAuthenticationResponse } from "@modules/accounts/dtos/IAuthenticationResponseDTO";
 import { IAuthenticateUserRequest } from "./AuthenticateUserDTO";
 
 
@@ -30,61 +30,32 @@ class AuthenticateUserUseCase {
 
     }
 
-    async execute({ email, password }: IAuthenticateUserRequest): Promise<ITokensResponse> {
+    async execute({ email, password }: IAuthenticateUserRequest): Promise<IAuthenticationResponse> {
         try {
 
-            if (process.env.SESSION_TYPE === "SESSION") {
 
-                const user = await this.usersRepository.findByEmail(email)
-
-
-                if (!user) {
-                    throw new AppError("email or password incorrect")
-                }
-
-                if (!user.is_confirmed) {
-                    throw new AppError("You need to confirm your account before you loggin for the first time. Please check your email for the confirmation register email", 400)
-                }
-
-                //const passwordMatch = await compare(password, user.password)
-
-                if (!validatePassword(password, user.salt, user.password_hash)) {
-                    throw new AppError("email or password incorrect")
-                }
+            const user = await this.usersRepository.findByEmail(email)
 
 
-                await this.usersRepository.markUserAsLogged(user.id as string)
-
-
-                return {
-                    user: {
-                        id: user.id as string,
-                        email: user.email as string
-                    }
-                }
-
+            if (!user) {
+                throw new AppError("email or password incorrect")
             }
-            else {
-                const user = await this.usersRepository.findByEmail(email)
+
+            if (!user.is_confirmed) {
+                throw new AppError("You need to confirm your account before you loggin for the first time. Please check your email for the confirmation register email", 400)
+            }
+
+            //const passwordMatch = await compare(password, user.password)
+
+            if (!validatePassword(password, user.salt, user.password_hash)) {
+                throw new AppError("email or password incorrect")
+            }
 
 
-                if (!user) {
-                    throw new AppError("email or password incorrect")
-                }
-
-                if (!user.is_confirmed) {
-                    throw new AppError("You need to confirm your account before you loggin for the first time. Please check your email for the confirmation register email", 400)
-                }
-
-                //const passwordMatch = await compare(password, user.password)
-
-                if (!validatePassword(password, user.salt, user.password_hash)) {
-                    throw new AppError("email or password incorrect")
-                }
+            await this.usersRepository.markUserAsLogged(user.id as string)
 
 
-                await this.usersRepository.markUserAsLogged(user.id as string)
-
+            if (process.env.SESSION_TYPE === "JWT") {
                 //deleta todos os tokens de outros logins
                 //deletar ao logar ou deletar ao expirar(fazer func para isso no bd) ??? 
                 await this.usersTokensRepository.deleteByUserId(user.id as string)
@@ -123,7 +94,16 @@ class AuthenticateUserUseCase {
                     //  expires_date: token_expires_date,
                     refresh_token
                 }
+
             }
+
+            return {
+                user: {
+                    id: user.id as string,
+                    email: user.email as string
+                }
+            }
+
 
 
 
