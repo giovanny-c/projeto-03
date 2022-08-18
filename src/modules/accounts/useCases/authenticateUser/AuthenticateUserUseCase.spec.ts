@@ -37,15 +37,21 @@ describe("Authenticate a User", () => {
             password: "1234"
         }
 
-        await createUserUseCase.execute(user)
+        const savedUser = await createUserUseCase.execute(user)
 
         const result = await authenticateUserUseCase.execute({
             email: user.email as string,
             password: user.password as string
         })
 
-        expect(result).toHaveProperty("token")
-        expect(result).toHaveProperty("refresh_token")
+        expect(result).toHaveProperty("user")
+        expect(result.user).toHaveProperty("id")
+
+        if (process.env.SESSION_TYPE === "JWT") {
+
+            expect(result).toHaveProperty("token")
+            expect(result).toHaveProperty("refresh_token")
+        }
     })
 
     it("Should not be able to authenticate a non-existent user", async () => {
