@@ -1,5 +1,5 @@
 import { IUsersRepository } from "@modules/accounts/repositories/IUsersRepository";
-import { IFileRepository } from "@modules/TDB/repositories/IFileRepository";
+import { IFileRepository } from "@modules/File/repositories/IFileRepository";
 import { IStorageProvider } from "@shared/container/providers/storageProvider/IStorageProvider";
 import { AppError } from "@shared/errors/AppError";
 import { inject, injectable } from "tsyringe";

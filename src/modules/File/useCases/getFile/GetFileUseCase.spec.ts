@@ -1,5 +1,5 @@
 import { UsersRepositoryInMemory } from "@modules/accounts/repositories/In-memory/UsersRepositoryInMemory"
-import { FileRepositoryInMemory } from "@modules/TDB/repositories/In-memory/FileRepositoryInMemory"
+import { FileRepositoryInMemory } from "@modules/File/repositories/In-memory/FileRepositoryInMemory"
 import { AppError } from "@shared/errors/AppError"
 import { GetFileUseCase } from "./GetFileUseCase"
 

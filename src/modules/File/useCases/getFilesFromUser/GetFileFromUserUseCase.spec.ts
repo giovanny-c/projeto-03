@@ -1,11 +1,11 @@
 import { UsersRepositoryInMemory } from "@modules/accounts/repositories/In-memory/UsersRepositoryInMemory"
 
-import { FileRepositoryInMemory } from "@modules/TDB/repositories/In-memory/FileRepositoryInMemory"
+import { FileRepositoryInMemory } from "@modules/File/repositories/In-memory/FileRepositoryInMemory"
 import { AppError } from "@shared/errors/AppError"
 import { GetFilesFromUserUseCase } from "./GetFilesFromUserUseCase"
-import { IFileResponseDTO } from "@modules/TDB/dtos/IFileResponseDTO";
+import { IFileResponseDTO } from "@modules/File/dtos/IFileResponseDTO";
 
-import { File } from "@modules/TDB/entities/File";
+import { File } from "@modules/File/entities/File";
 
 
 

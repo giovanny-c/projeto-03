@@ -14,8 +14,8 @@ import { GeneratePdfController } from "../modules/accounts/useCases/generatePdf/
 //middlewares
 import { ensureAuthenticated } from "../shared/middlewares/ensureAuthenticated";
 import multer from "multer"
-import { GetFileFromUserController } from "@modules/TDB/useCases/getFilesFromUser/GetFileFromUserController";
-import { GetFileController } from "@modules/TDB/useCases/getFile/GetFileController";
+import { GetFileFromUserController } from "@modules/File/useCases/getFilesFromUser/GetFileFromUserController";
+import { GetFileController } from "@modules/File/useCases/getFile/GetFileController";
 import { ensureAdmin } from "@shared/middlewares/ensureAdmin";
 
 const upload = multer()

@@ -1,10 +1,10 @@
 import { IUsersRepository } from "@modules/accounts/repositories/IUsersRepository";
-import { File } from "@modules/TDB/entities/File";
-import { FileMap } from "@modules/TDB/mapper/FileMap";
-import { IFileRepository } from "@modules/TDB/repositories/IFileRepository";
+import { File } from "@modules/File/entities/File";
+import { FileMap } from "@modules/File/mapper/FileMap";
+import { IFileRepository } from "@modules/File/repositories/IFileRepository";
 import { AppError } from "@shared/errors/AppError";
 import { inject, injectable } from "tsyringe";
-import { IFileResponseDTO } from "@modules/TDB/dtos/IFileResponseDTO"
+import { IFileResponseDTO } from "@modules/File/dtos/IFileResponseDTO"
 
 @injectable()
 class GetFileUseCase {

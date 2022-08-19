@@ -1,5 +1,5 @@
-import { ISaveFile } from "@modules/TDB/dtos/ISaveFileDTO";
-import { File } from "@modules/TDB/entities/File";
+import { ISaveFile } from "@modules/File/dtos/ISaveFileDTO";
+import { File } from "@modules/File/entities/File";
 import { IFileRepository } from "../IFileRepository";
 import { v4 as uuidV4 } from "uuid"
 

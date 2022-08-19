@@ -1,7 +1,7 @@
 import upload from "@config/upload"
 import { UsersRepositoryInMemory } from "@modules/accounts/repositories/In-memory/UsersRepositoryInMemory"
 
-import { FileRepositoryInMemory } from "@modules/TDB/repositories/In-memory/FileRepositoryInMemory"
+import { FileRepositoryInMemory } from "@modules/File/repositories/In-memory/FileRepositoryInMemory"
 import { DayjsDateProvider } from "@shared/container/providers/dateProvider/implementations/DayjsDateProvider"
 import { StorageProviderInMemory } from "@shared/container/providers/storageProvider/In-memory/StorageProviderInMemory"
 
@@ -119,6 +119,8 @@ describe("Delete a File", () => {
         await expect(
             deleteFileUseCase.execute(id, user2.id as string)
         ).rejects.toEqual(new AppError("File not found OR (You cant delete this file. Since you do not own it.)", 404))
+
+        fs.unlinkSync(file_path)
 
     })
 
