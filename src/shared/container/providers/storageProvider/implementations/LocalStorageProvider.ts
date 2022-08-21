@@ -15,6 +15,9 @@ class LocalStorageProvider implements IStorageProvider {
 
             let dir = `${upload.tmpFolder}/${folder}`
 
+            //ver se funciona 
+            //let dir = resolve(`${upload.tmpFolder}/${folder}`)
+
             if (!fs.existsSync(dir)) {
                 fs.mkdirSync(dir, { recursive: true })
             }
